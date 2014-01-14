@@ -1,9 +1,10 @@
-ï»?
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServePCC_Center_2008", "ServePCC_Center_2008.vcproj", "{9B8A6DF9-F5BE-4564-A1E6-D06D5262CC79}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientPCC_Center_2008", "client\ClientPCC_Center_2008.vcproj", "{F15CBADD-2945-4EB2-A87A-6E7D5DDD6319}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PCC_Node", "PCC_Node\PCC_Node.vcproj", "{9E516628-4F5B-458F-927F-44254F5C3035}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +30,12 @@ Global
 		{F15CBADD-2945-4EB2-A87A-6E7D5DDD6319}.Release|Win32.Build.0 = Release|Win32
 		{F15CBADD-2945-4EB2-A87A-6E7D5DDD6319}.Release|x64.ActiveCfg = Release|x64
 		{F15CBADD-2945-4EB2-A87A-6E7D5DDD6319}.Release|x64.Build.0 = Release|x64
+		{9E516628-4F5B-458F-927F-44254F5C3035}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E516628-4F5B-458F-927F-44254F5C3035}.Debug|Win32.Build.0 = Debug|Win32
+		{9E516628-4F5B-458F-927F-44254F5C3035}.Debug|x64.ActiveCfg = Debug|Win32
+		{9E516628-4F5B-458F-927F-44254F5C3035}.Release|Win32.ActiveCfg = Release|Win32
+		{9E516628-4F5B-458F-927F-44254F5C3035}.Release|Win32.Build.0 = Release|Win32
+		{9E516628-4F5B-458F-927F-44254F5C3035}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

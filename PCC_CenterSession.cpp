@@ -6,7 +6,8 @@
 #include "PCC_CenterSession.h"
 #include "ipcvt.h"
 #include "nplog.h"
-
+#include "nodemanage.h"
+#include "singleton.h"
 /////////////////////////////////////////////////////////////////////
 // interface PCC_Center
 
@@ -30,6 +31,7 @@ TCPSError PCC_Center_S::OnConnected(
 {
 	// TODO: 请添加接口PCC_Center的连接后处理
 
+	m_skey = sessionKey;
 	NPLogInfo(("PCC_Center_S::OnConnected(%d, %s, %d)", sessionKey, IPP_TO_STR_A(peerID_IPP), sessionCount));
 	return TCPS_OK;
 }
@@ -44,7 +46,7 @@ void PCC_Center_S::OnCallbackReady()
 void PCC_Center_S::OnPostingCallReady()
 {
 	// TODO: 请添加接口PCC_Center的posting回调就绪处理
-
+	pgrid_util::Singleton<CNodeManage>::instance().pushNode(m_skey,this);
 	NPLogInfo(("PCC_Center_S::OnPostingCallReady()"));
 }
 
@@ -66,6 +68,7 @@ void PCC_Center_S::OnClose(
 {
 	NPLogInfo(("PCC_Center_S::OnClose(%d, %s, %s(%d))", sessionKey, IPP_TO_STR_A(peerID_IPP), tcps_GetErrTxt(cause), cause));
 	// TODO: 请添加接口PCC_Center的连接关闭处理
+	pgrid_util::Singleton<CNodeManage>::instance().diableNode(sessionKey);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -134,7 +137,10 @@ TCPSError PCC_User_S::GetPccProperty(
 				) method
 {
 	// TODO: 请实现此函数
-	return TCPS_ERR_NOT_IMPLEMENTED;
+	PCC_Center_T::PCCProperty prop; 
+	pgrid_util::Singleton<CNodeManage>::instance().GetPccProperty(prop);
+	memcpy(&pccProp,&prop,sizeof(PCCProperty));
+	return TCPS_OK;
 }
 
 TCPSError PCC_User_S::ListNodes(

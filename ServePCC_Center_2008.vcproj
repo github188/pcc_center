@@ -329,6 +329,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\PCC_CenterSession.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PCC_CenterSessionWrapper.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\serve.cpp"
 				>
 			</File>
@@ -368,24 +376,12 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\PCC_CenterSession.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PCC_CenterSessionWrapper.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\StdAfx.h"
-				>
-			</File>
 			<File
 				RelativePath=".\PCC_CenterClient.h"
 				>
@@ -396,6 +392,10 @@
 			</File>
 			<File
 				RelativePath=".\PCC_CenterTypesDefine.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StdAfx.h"
 				>
 			</File>
 		</Filter>
@@ -1252,6 +1252,22 @@
 			</File>
 			<File
 				RelativePath="C:\netposa_pubsdk\include\ZoneSet.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="nw"
+			>
+			<File
+				RelativePath=".\NodeManage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NodeManage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Singleton.h"
 				>
 			</File>
 		</Filter>

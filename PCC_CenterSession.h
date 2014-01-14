@@ -40,7 +40,7 @@ private:
 
 public:
 	// TODO: 可以在此处添加PCC_Center的自定义成员
-
+   INT32 m_skey;
 private:
 	PCC_Center_S(PCC_CenterSessionMaker& sessionMaker, PCC_CenterSession* sessionR, IPCC_Center_LocalCallback* sessionL);
 	~PCC_Center_S();
