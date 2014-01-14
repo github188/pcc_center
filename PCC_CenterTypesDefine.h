@@ -13,224 +13,6 @@
 
 class PCC_CenterSessionMaker;
 
-// 'class PCC_Center_T'用于定义接口'PCC_Center'的局部类型
-#ifndef PCC_Center_T_defined
-#define PCC_Center_T_defined
-class PCC_Center_T
-{
-public:
-	struct PCC_ModelFile
-	{
-		tcps_String name;
-
-		int Compare(const PCC_ModelFile& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelFile)
-	};
-
-public:
-	#pragma pack(push, 1)
-	struct PCC_ModelVersion
-	{
-		INT32 major;
-		INT32 minor;
-		INT32 built;
-
-		PCC_ModelVersion()
-		{
-			this->major = 0;
-			this->minor = 0;
-			this->built = 0;
-		}
-
-		int Compare(const PCC_ModelVersion& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelVersion)
-	};
-	#pragma pack(pop) // #pragma pack(push, 1)
-
-public:
-	struct PCC_ModelTag
-	{
-		tcps_String name;
-		PCC_ModelVersion version;
-
-		int Compare(const PCC_ModelTag& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelTag)
-	};
-
-public:
-	struct PCC_ModelProperty
-	{
-		PCC_ModelTag modelTag;
-		tcps_String description;
-		LTMSEL addTime;
-
-		PCC_ModelProperty()
-		{
-			this->addTime = INVALID_UTC_MSEL;
-		}
-
-		int Compare(const PCC_ModelProperty& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelProperty)
-	};
-
-public:
-	struct PCC_ModelPropWithKey
-	{
-		INT64 key;
-		PCC_ModelProperty prop;
-
-		PCC_ModelPropWithKey()
-		{
-			this->key = 0;
-		}
-
-		int Compare(const PCC_ModelPropWithKey& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelPropWithKey)
-	};
-
-public:
-	struct PCCProperty
-	{
-		tcps_String version;
-
-		int Compare(const PCCProperty& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(PCCProperty)
-	};
-
-public:
-	enum CPUType
-	{
-		PCC_CPU_X86_X64 = 0,
-		PCC_CPU_ARM = 1,
-		PCC_CPU_MIPS = 2,
-	};
-
-public:
-	enum OSType
-	{
-		PCC_OS_WINDOWS = 0,
-		PCC_OS_LINUX = 1,
-		PCC_OS_UNIX = 2,
-		PCC_OS_ANDROID = 3,
-		PCC_OS_IOS = 4,
-	};
-
-public:
-	struct NodeDesc
-	{
-		tcps_String name;
-		CPUType cpuType;
-		INT64 cpuFreq;
-		INT32 cpuProcessors;
-		INT32 cpuThreads;
-		INT64 totalMemoryBytes;
-		INT64 networkBandwidth;
-		OSType osType;
-		tcps_String osDetail;
-		INT32 executeBits;
-
-		NodeDesc()
-		{
-			this->cpuType = PCC_CPU_X86_X64;
-			this->cpuFreq = 0;
-			this->cpuProcessors = 0;
-			this->cpuThreads = 0;
-			this->totalMemoryBytes = 0;
-			this->networkBandwidth = 0;
-			this->osType = PCC_OS_WINDOWS;
-			this->executeBits = 0;
-		}
-
-		int Compare(const NodeDesc& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(NodeDesc)
-	};
-
-public:
-	#pragma pack(push, 1)
-	struct DynamicContext
-	{
-		INT32 cpuUsage;
-		INT32 memoryUsage;
-		INT32 networkUsage;
-
-		DynamicContext()
-		{
-			this->cpuUsage = 0;
-			this->memoryUsage = 0;
-			this->networkUsage = 0;
-		}
-
-		int Compare(const DynamicContext& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(DynamicContext)
-	};
-	#pragma pack(pop) // #pragma pack(push, 1)
-};
-
-struct IPCC_Center_LocalMethod : public iscm_ILocalMethodBase, public PCC_Center_T
-{
-	typedef TCPSError (*FN_OnStreamedCall_L_)(
-				IN void* sessionObj,
-				IN const char* methodName,
-				IN INT_PTR nameLen /*= -1*/,
-				IN const void* data /*= NULL*/,
-				IN INT_PTR dataLen /*>= 0*/,
-				OUT LPVOID* replyData /*= NULL*/,
-				OUT INT_PTR* replyLen /*= NULL*/
-				);
-};
-
-struct IPCC_Center_LocalCallback : public iscm_ILocalCallbackBase, public PCC_Center_T
-{
-	typedef TCPSError (*FN_OnStreamedCallback_L_)(
-				IN void* sessionObj,
-				IN const char* callbackName,
-				IN INT_PTR nameLen /*= -1*/,
-				IN const void* data /*= NULL*/,
-				IN INT_PTR dataLen /*>= 0*/,
-				OUT LPVOID* replyData /*= NULL*/,
-				OUT INT_PTR* replyLen /*= NULL*/
-				);
-
-	typedef TCPSError (*FN_AddModelCenter)(
-				IN void* sessionObj_wrap,
-				IN const IPP& centerIPP
-				) posting_callback;
-
-	typedef TCPSError (*FN_DelModelCenter)(
-				IN void* sessionObj_wrap,
-				IN const IPP& centerIPP
-				) posting_callback;
-
-	typedef TCPSError (*FN_GetStaticContext)(
-				IN void* sessionObj_wrap,
-				OUT NodeDesc& staticContext
-				) cacheable_callback;
-
-	typedef TCPSError (*FN_GetDynamicContext)(
-				IN void* sessionObj_wrap,
-				OUT DynamicContext& dynamicContext
-				) callback;
-
-	typedef TCPSError (*FN_AddModel)(
-				IN void* sessionObj_wrap,
-				IN const PCC_ModelProperty& moduleProperty,
-				IN const tcps_Array<PCC_ModelFile>& modelFiles
-				) callback;
-
-	typedef TCPSError (*FN_DelModel)(
-				IN void* sessionObj_wrap,
-				IN INT64 modelKey
-				) callback;
-};
-
-typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
-			IN const IPP& clientID_IPP,
-			IN PCC_CenterSessionMaker& sessionMaker,
-			OUT IPCC_Center_LocalMethod*& methodHandler,
-			IN IPCC_Center_LocalCallback* callbackHandler
-			);
-#endif	// #ifndef PCC_Center_T_defined
-
 #ifndef PCC_ModulePattern_defined
 #define PCC_ModulePattern_defined
 enum PCC_ModulePattern
@@ -425,103 +207,268 @@ struct PCC_ModulePropWithKey
 };
 #endif	// #ifndef PCC_ModulePropWithKey_defined
 
+#ifndef ExecuteState_defined
+#define ExecuteState_defined
+#pragma pack(push, 1)
+struct ExecuteState
+{
+	INT32 state;
+
+	ExecuteState()
+	{
+		this->state = 0;
+	}
+
+	int Compare(const ExecuteState& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(ExecuteState)
+};
+#pragma pack(pop) // #pragma pack(push, 1)
+#endif	// #ifndef ExecuteState_defined
+
+#ifndef PCCProperty_defined
+#define PCCProperty_defined
+struct PCCProperty
+{
+	tcps_String version;
+
+	int Compare(const PCCProperty& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCCProperty)
+};
+#endif	// #ifndef PCCProperty_defined
+
+#ifndef CPUType_defined
+#define CPUType_defined
+enum CPUType
+{
+	PCC_CPU_X86_X64 = 0,
+	PCC_CPU_ARM = 1,
+	PCC_CPU_MIPS = 2,
+};
+#endif	// #ifndef CPUType_defined
+
+#ifndef OSType_defined
+#define OSType_defined
+enum OSType
+{
+	PCC_OS_WINDOWS = 0,
+	PCC_OS_LINUX = 1,
+	PCC_OS_UNIX = 2,
+	PCC_OS_ANDROID = 3,
+	PCC_OS_IOS = 4,
+};
+#endif	// #ifndef OSType_defined
+
+#ifndef NodeDesc_defined
+#define NodeDesc_defined
+struct NodeDesc
+{
+	tcps_String name;
+	CPUType cpuType;
+	INT64 cpuFreq;
+	INT32 cpuProcessors;
+	INT32 cpuThreads;
+	INT64 totalMemoryBytes;
+	INT64 networkBandwidth;
+	OSType osType;
+	tcps_String osDetail;
+	INT32 executeBits;
+
+	NodeDesc()
+	{
+		this->cpuType = PCC_CPU_X86_X64;
+		this->cpuFreq = 0;
+		this->cpuProcessors = 0;
+		this->cpuThreads = 0;
+		this->totalMemoryBytes = 0;
+		this->networkBandwidth = 0;
+		this->osType = PCC_OS_WINDOWS;
+		this->executeBits = 0;
+	}
+
+	int Compare(const NodeDesc& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(NodeDesc)
+};
+#endif	// #ifndef NodeDesc_defined
+
+#ifndef DynamicContext_defined
+#define DynamicContext_defined
+#pragma pack(push, 1)
+struct DynamicContext
+{
+	INT32 cpuUsage;
+	INT32 memoryUsage;
+	INT32 networkUsage;
+
+	DynamicContext()
+	{
+		this->cpuUsage = 0;
+		this->memoryUsage = 0;
+		this->networkUsage = 0;
+	}
+
+	int Compare(const DynamicContext& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(DynamicContext)
+};
+#pragma pack(pop) // #pragma pack(push, 1)
+#endif	// #ifndef DynamicContext_defined
+
+#ifndef PCC_ModelFile_defined
+#define PCC_ModelFile_defined
+struct PCC_ModelFile
+{
+	tcps_String name;
+
+	int Compare(const PCC_ModelFile& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelFile)
+};
+#endif	// #ifndef PCC_ModelFile_defined
+
+#ifndef PCC_ModelVersion_defined
+#define PCC_ModelVersion_defined
+#pragma pack(push, 1)
+struct PCC_ModelVersion
+{
+	INT32 major;
+	INT32 minor;
+	INT32 built;
+
+	PCC_ModelVersion()
+	{
+		this->major = 0;
+		this->minor = 0;
+		this->built = 0;
+	}
+
+	int Compare(const PCC_ModelVersion& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelVersion)
+};
+#pragma pack(pop) // #pragma pack(push, 1)
+#endif	// #ifndef PCC_ModelVersion_defined
+
+#ifndef PCC_ModelTag_defined
+#define PCC_ModelTag_defined
+struct PCC_ModelTag
+{
+	tcps_String name;
+	PCC_ModelVersion version;
+
+	int Compare(const PCC_ModelTag& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelTag)
+};
+#endif	// #ifndef PCC_ModelTag_defined
+
+#ifndef PCC_ModelProperty_defined
+#define PCC_ModelProperty_defined
+struct PCC_ModelProperty
+{
+	PCC_ModelTag modelTag;
+	tcps_String description;
+	LTMSEL addTime;
+
+	PCC_ModelProperty()
+	{
+		this->addTime = INVALID_UTC_MSEL;
+	}
+
+	int Compare(const PCC_ModelProperty& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelProperty)
+};
+#endif	// #ifndef PCC_ModelProperty_defined
+
+#ifndef PCC_ModelPropWithKey_defined
+#define PCC_ModelPropWithKey_defined
+struct PCC_ModelPropWithKey
+{
+	INT64 key;
+	PCC_ModelProperty prop;
+
+	PCC_ModelPropWithKey()
+	{
+		this->key = 0;
+	}
+
+	int Compare(const PCC_ModelPropWithKey& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelPropWithKey)
+};
+#endif	// #ifndef PCC_ModelPropWithKey_defined
+
+// 'class PCC_Center_T'用于定义接口'PCC_Center'的局部类型
+#ifndef PCC_Center_T_defined
+#define PCC_Center_T_defined
+class PCC_Center_T
+{
+};
+
+struct IPCC_Center_LocalMethod : public iscm_ILocalMethodBase, public PCC_Center_T
+{
+	typedef TCPSError (*FN_OnStreamedCall_L_)(
+				IN void* sessionObj,
+				IN const char* methodName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+};
+
+struct IPCC_Center_LocalCallback : public iscm_ILocalCallbackBase, public PCC_Center_T
+{
+	typedef TCPSError (*FN_OnStreamedCallback_L_)(
+				IN void* sessionObj,
+				IN const char* callbackName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+
+	typedef TCPSError (*FN_AddModelCenter)(
+				IN void* sessionObj_wrap,
+				IN const IPP& centerIPP
+				) posting_callback;
+
+	typedef TCPSError (*FN_DelModelCenter)(
+				IN void* sessionObj_wrap,
+				IN const IPP& centerIPP
+				) posting_callback;
+
+	typedef TCPSError (*FN_GetStaticContext)(
+				IN void* sessionObj_wrap,
+				OUT NodeDesc& staticContext
+				) cacheable_callback;
+
+	typedef TCPSError (*FN_GetDynamicContext)(
+				IN void* sessionObj_wrap,
+				OUT DynamicContext& dynamicContext
+				) callback;
+
+	typedef TCPSError (*FN_AddModel)(
+				IN void* sessionObj_wrap,
+				IN const PCC_ModelProperty& moduleProperty,
+				IN const tcps_Array<PCC_ModelFile>& modelFiles
+				) callback;
+
+	typedef TCPSError (*FN_DelModel)(
+				IN void* sessionObj_wrap,
+				IN INT64 modelKey
+				) callback;
+};
+
+typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
+			IN const IPP& clientID_IPP,
+			IN PCC_CenterSessionMaker& sessionMaker,
+			OUT IPCC_Center_LocalMethod*& methodHandler,
+			IN IPCC_Center_LocalCallback* callbackHandler
+			);
+#endif	// #ifndef PCC_Center_T_defined
+
 // 'class PCC_User_T'用于定义接口'PCC_User'的局部类型
 #ifndef PCC_User_T_defined
 #define PCC_User_T_defined
 class PCC_User_T
 {
-public:
-	#pragma pack(push, 1)
-	struct ExecuteState
-	{
-		INT32 state;
-
-		ExecuteState()
-		{
-			this->state = 0;
-		}
-
-		int Compare(const ExecuteState& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(ExecuteState)
-	};
-	#pragma pack(pop) // #pragma pack(push, 1)
-
-public:
-	struct PCCProperty
-	{
-		tcps_String version;
-
-		int Compare(const PCCProperty& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(PCCProperty)
-	};
-
-public:
-	enum CPUType
-	{
-		PCC_CPU_X86_X64 = 0,
-		PCC_CPU_ARM = 1,
-		PCC_CPU_MIPS = 2,
-	};
-
-public:
-	enum OSType
-	{
-		PCC_OS_WINDOWS = 0,
-		PCC_OS_LINUX = 1,
-		PCC_OS_UNIX = 2,
-		PCC_OS_ANDROID = 3,
-		PCC_OS_IOS = 4,
-	};
-
-public:
-	struct NodeDesc
-	{
-		tcps_String name;
-		CPUType cpuType;
-		INT64 cpuFreq;
-		INT32 cpuProcessors;
-		INT32 cpuThreads;
-		INT64 totalMemoryBytes;
-		INT64 networkBandwidth;
-		OSType osType;
-		tcps_String osDetail;
-		INT32 executeBits;
-
-		NodeDesc()
-		{
-			this->cpuType = PCC_CPU_X86_X64;
-			this->cpuFreq = 0;
-			this->cpuProcessors = 0;
-			this->cpuThreads = 0;
-			this->totalMemoryBytes = 0;
-			this->networkBandwidth = 0;
-			this->osType = PCC_OS_WINDOWS;
-			this->executeBits = 0;
-		}
-
-		int Compare(const NodeDesc& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(NodeDesc)
-	};
-
-public:
-	#pragma pack(push, 1)
-	struct DynamicContext
-	{
-		INT32 cpuUsage;
-		INT32 memoryUsage;
-		INT32 networkUsage;
-
-		DynamicContext()
-		{
-			this->cpuUsage = 0;
-			this->memoryUsage = 0;
-			this->networkUsage = 0;
-		}
-
-		int Compare(const DynamicContext& r) const;
-		ISCM_STRUCT_COMPARE_OPERATORS(DynamicContext)
-	};
-	#pragma pack(pop) // #pragma pack(push, 1)
 };
 
 struct IPCC_User_LocalMethod : public iscm_ILocalMethodBase, public PCC_User_T
@@ -618,153 +565,6 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 
 /////////////////////////////////////////////////////////////////////
 // 结构体的Compare()函数内联实现
-
-#ifndef PCC_Center_PCC_ModelFile_Compare_defined
-	#define PCC_Center_PCC_ModelFile_Compare_defined
-	inline int PCC_Center_T::PCC_ModelFile::Compare(const PCC_ModelFile& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->name, r.name);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelFile_Compare_defined
-
-#ifndef PCC_Center_PCC_ModelVersion_Compare_defined
-	#define PCC_Center_PCC_ModelVersion_Compare_defined
-	inline int PCC_Center_T::PCC_ModelVersion::Compare(const PCC_ModelVersion& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->major, r.major);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->minor, r.minor);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->built, r.built);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelVersion_Compare_defined
-
-#ifndef PCC_Center_PCC_ModelTag_Compare_defined
-	#define PCC_Center_PCC_ModelTag_Compare_defined
-	inline int PCC_Center_T::PCC_ModelTag::Compare(const PCC_ModelTag& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->name, r.name);
-		if(0 != cmp)
-			return cmp;
-		cmp = this->version.Compare(r.version);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelTag_Compare_defined
-
-#ifndef PCC_Center_PCC_ModelProperty_Compare_defined
-	#define PCC_Center_PCC_ModelProperty_Compare_defined
-	inline int PCC_Center_T::PCC_ModelProperty::Compare(const PCC_ModelProperty& r) const
-	{
-		int cmp = 0;
-		cmp = this->modelTag.Compare(r.modelTag);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->description, r.description);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->addTime, r.addTime);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelProperty_Compare_defined
-
-#ifndef PCC_Center_PCC_ModelPropWithKey_Compare_defined
-	#define PCC_Center_PCC_ModelPropWithKey_Compare_defined
-	inline int PCC_Center_T::PCC_ModelPropWithKey::Compare(const PCC_ModelPropWithKey& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->key, r.key);
-		if(0 != cmp)
-			return cmp;
-		cmp = this->prop.Compare(r.prop);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelPropWithKey_Compare_defined
-
-#ifndef PCC_Center_PCCProperty_Compare_defined
-	#define PCC_Center_PCCProperty_Compare_defined
-	inline int PCC_Center_T::PCCProperty::Compare(const PCCProperty& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->version, r.version);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_PCCProperty_Compare_defined
-
-#ifndef PCC_Center_NodeDesc_Compare_defined
-	#define PCC_Center_NodeDesc_Compare_defined
-	inline int PCC_Center_T::NodeDesc::Compare(const NodeDesc& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->name, r.name);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->cpuType, r.cpuType);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->cpuFreq, r.cpuFreq);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->cpuProcessors, r.cpuProcessors);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->cpuThreads, r.cpuThreads);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->totalMemoryBytes, r.totalMemoryBytes);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->networkBandwidth, r.networkBandwidth);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->osType, r.osType);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->osDetail, r.osDetail);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->executeBits, r.executeBits);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_NodeDesc_Compare_defined
-
-#ifndef PCC_Center_DynamicContext_Compare_defined
-	#define PCC_Center_DynamicContext_Compare_defined
-	inline int PCC_Center_T::DynamicContext::Compare(const DynamicContext& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->cpuUsage, r.cpuUsage);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->memoryUsage, r.memoryUsage);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->networkUsage, r.networkUsage);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_Center_DynamicContext_Compare_defined
 
 #ifndef PCC_ModuleVersion_Compare_defined
 	#define PCC_ModuleVersion_Compare_defined
@@ -919,9 +719,9 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 	}
 #endif	// #ifndef PCC_ModulePropWithKey_Compare_defined
 
-#ifndef PCC_User_ExecuteState_Compare_defined
-	#define PCC_User_ExecuteState_Compare_defined
-	inline int PCC_User_T::ExecuteState::Compare(const ExecuteState& r) const
+#ifndef ExecuteState_Compare_defined
+	#define ExecuteState_Compare_defined
+	inline int ExecuteState::Compare(const ExecuteState& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->state, r.state);
@@ -929,11 +729,11 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef PCC_User_ExecuteState_Compare_defined
+#endif	// #ifndef ExecuteState_Compare_defined
 
-#ifndef PCC_User_PCCProperty_Compare_defined
-	#define PCC_User_PCCProperty_Compare_defined
-	inline int PCC_User_T::PCCProperty::Compare(const PCCProperty& r) const
+#ifndef PCCProperty_Compare_defined
+	#define PCCProperty_Compare_defined
+	inline int PCCProperty::Compare(const PCCProperty& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->version, r.version);
@@ -941,11 +741,11 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef PCC_User_PCCProperty_Compare_defined
+#endif	// #ifndef PCCProperty_Compare_defined
 
-#ifndef PCC_User_NodeDesc_Compare_defined
-	#define PCC_User_NodeDesc_Compare_defined
-	inline int PCC_User_T::NodeDesc::Compare(const NodeDesc& r) const
+#ifndef NodeDesc_Compare_defined
+	#define NodeDesc_Compare_defined
+	inline int NodeDesc::Compare(const NodeDesc& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->name, r.name);
@@ -980,11 +780,11 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef PCC_User_NodeDesc_Compare_defined
+#endif	// #ifndef NodeDesc_Compare_defined
 
-#ifndef PCC_User_DynamicContext_Compare_defined
-	#define PCC_User_DynamicContext_Compare_defined
-	inline int PCC_User_T::DynamicContext::Compare(const DynamicContext& r) const
+#ifndef DynamicContext_Compare_defined
+	#define DynamicContext_Compare_defined
+	inline int DynamicContext::Compare(const DynamicContext& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->cpuUsage, r.cpuUsage);
@@ -998,158 +798,89 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef PCC_User_DynamicContext_Compare_defined
+#endif	// #ifndef DynamicContext_Compare_defined
+
+#ifndef PCC_ModelFile_Compare_defined
+	#define PCC_ModelFile_Compare_defined
+	inline int PCC_ModelFile::Compare(const PCC_ModelFile& r) const
+	{
+		int cmp = 0;
+		cmp = SimpleTypeCompare_(this->name, r.name);
+		if(0 != cmp)
+			return cmp;
+		return 0;
+	}
+#endif	// #ifndef PCC_ModelFile_Compare_defined
+
+#ifndef PCC_ModelVersion_Compare_defined
+	#define PCC_ModelVersion_Compare_defined
+	inline int PCC_ModelVersion::Compare(const PCC_ModelVersion& r) const
+	{
+		int cmp = 0;
+		cmp = SimpleTypeCompare_(this->major, r.major);
+		if(0 != cmp)
+			return cmp;
+		cmp = SimpleTypeCompare_(this->minor, r.minor);
+		if(0 != cmp)
+			return cmp;
+		cmp = SimpleTypeCompare_(this->built, r.built);
+		if(0 != cmp)
+			return cmp;
+		return 0;
+	}
+#endif	// #ifndef PCC_ModelVersion_Compare_defined
+
+#ifndef PCC_ModelTag_Compare_defined
+	#define PCC_ModelTag_Compare_defined
+	inline int PCC_ModelTag::Compare(const PCC_ModelTag& r) const
+	{
+		int cmp = 0;
+		cmp = SimpleTypeCompare_(this->name, r.name);
+		if(0 != cmp)
+			return cmp;
+		cmp = this->version.Compare(r.version);
+		if(0 != cmp)
+			return cmp;
+		return 0;
+	}
+#endif	// #ifndef PCC_ModelTag_Compare_defined
+
+#ifndef PCC_ModelProperty_Compare_defined
+	#define PCC_ModelProperty_Compare_defined
+	inline int PCC_ModelProperty::Compare(const PCC_ModelProperty& r) const
+	{
+		int cmp = 0;
+		cmp = this->modelTag.Compare(r.modelTag);
+		if(0 != cmp)
+			return cmp;
+		cmp = SimpleTypeCompare_(this->description, r.description);
+		if(0 != cmp)
+			return cmp;
+		cmp = SimpleTypeCompare_(this->addTime, r.addTime);
+		if(0 != cmp)
+			return cmp;
+		return 0;
+	}
+#endif	// #ifndef PCC_ModelProperty_Compare_defined
+
+#ifndef PCC_ModelPropWithKey_Compare_defined
+	#define PCC_ModelPropWithKey_Compare_defined
+	inline int PCC_ModelPropWithKey::Compare(const PCC_ModelPropWithKey& r) const
+	{
+		int cmp = 0;
+		cmp = SimpleTypeCompare_(this->key, r.key);
+		if(0 != cmp)
+			return cmp;
+		cmp = this->prop.Compare(r.prop);
+		if(0 != cmp)
+			return cmp;
+		return 0;
+	}
+#endif	// #ifndef PCC_ModelPropWithKey_Compare_defined
 
 
 /////////////////////////////////////////////////////////////////////
 // 结构体的流式支持内联函数
-
-#ifndef PCC_Center_PCC_ModelFile_STREAMED_FUNCTIONS_defined
-	#define PCC_Center_PCC_ModelFile_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_Center_T::PCC_ModelFile& val)
-	{
-		int size = 0;
-		size += iscm_GetStreamedSize(val.name);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCC_Center_T::PCC_ModelFile& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.name, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_Center_T::PCC_ModelFile& val)
-	{
-		iscm_StreamedStore(buf, val.name);
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelFile_STREAMED_FUNCTIONS_defined
-
-#ifndef PCC_Center_PCC_ModelTag_STREAMED_FUNCTIONS_defined
-	#define PCC_Center_PCC_ModelTag_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_Center_T::PCC_ModelTag& val)
-	{
-		int size = 0;
-		size += iscm_GetStreamedSize(val.name);
-		size += (int)sizeof(val.version);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCC_Center_T::PCC_ModelTag& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.name, data);
-		iscm_StreamedLoad(val.version, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_Center_T::PCC_ModelTag& val)
-	{
-		iscm_StreamedStore(buf, val.name);
-		iscm_StreamedStore(buf, val.version);
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelTag_STREAMED_FUNCTIONS_defined
-
-#ifndef PCC_Center_PCC_ModelProperty_STREAMED_FUNCTIONS_defined
-	#define PCC_Center_PCC_ModelProperty_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_Center_T::PCC_ModelProperty& val)
-	{
-		int size = 0;
-		size += iscm_GetStreamedSize(val.modelTag);
-		size += iscm_GetStreamedSize(val.description);
-		size += (int)sizeof(val.addTime);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCC_Center_T::PCC_ModelProperty& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.modelTag, data);
-		iscm_StreamedLoad(val.description, data);
-		iscm_StreamedLoad(val.addTime, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_Center_T::PCC_ModelProperty& val)
-	{
-		iscm_StreamedStore(buf, val.modelTag);
-		iscm_StreamedStore(buf, val.description);
-		iscm_StreamedStore(buf, val.addTime);
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelProperty_STREAMED_FUNCTIONS_defined
-
-#ifndef PCC_Center_PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
-	#define PCC_Center_PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_Center_T::PCC_ModelPropWithKey& val)
-	{
-		int size = 0;
-		size += (int)sizeof(val.key);
-		size += iscm_GetStreamedSize(val.prop);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCC_Center_T::PCC_ModelPropWithKey& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.key, data);
-		iscm_StreamedLoad(val.prop, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_Center_T::PCC_ModelPropWithKey& val)
-	{
-		iscm_StreamedStore(buf, val.key);
-		iscm_StreamedStore(buf, val.prop);
-	}
-#endif	// #ifndef PCC_Center_PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
-
-#ifndef PCC_Center_PCCProperty_STREAMED_FUNCTIONS_defined
-	#define PCC_Center_PCCProperty_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_Center_T::PCCProperty& val)
-	{
-		int size = 0;
-		size += iscm_GetStreamedSize(val.version);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCC_Center_T::PCCProperty& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.version, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_Center_T::PCCProperty& val)
-	{
-		iscm_StreamedStore(buf, val.version);
-	}
-#endif	// #ifndef PCC_Center_PCCProperty_STREAMED_FUNCTIONS_defined
-
-#ifndef PCC_Center_NodeDesc_STREAMED_FUNCTIONS_defined
-	#define PCC_Center_NodeDesc_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_Center_T::NodeDesc& val)
-	{
-		int size = 0;
-		size += iscm_GetStreamedSize(val.name);
-		size += (int)sizeof(val.cpuType);
-		size += (int)sizeof(val.cpuFreq);
-		size += (int)sizeof(val.cpuProcessors);
-		size += (int)sizeof(val.cpuThreads);
-		size += (int)sizeof(val.totalMemoryBytes);
-		size += (int)sizeof(val.networkBandwidth);
-		size += (int)sizeof(val.osType);
-		size += iscm_GetStreamedSize(val.osDetail);
-		size += (int)sizeof(val.executeBits);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCC_Center_T::NodeDesc& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.name, data);
-		iscm_StreamedLoad(val.cpuType, data);
-		iscm_StreamedLoad(val.cpuFreq, data);
-		iscm_StreamedLoad(val.cpuProcessors, data);
-		iscm_StreamedLoad(val.cpuThreads, data);
-		iscm_StreamedLoad(val.totalMemoryBytes, data);
-		iscm_StreamedLoad(val.networkBandwidth, data);
-		iscm_StreamedLoad(val.osType, data);
-		iscm_StreamedLoad(val.osDetail, data);
-		iscm_StreamedLoad(val.executeBits, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_Center_T::NodeDesc& val)
-	{
-		iscm_StreamedStore(buf, val.name);
-		iscm_StreamedStore(buf, val.cpuType);
-		iscm_StreamedStore(buf, val.cpuFreq);
-		iscm_StreamedStore(buf, val.cpuProcessors);
-		iscm_StreamedStore(buf, val.cpuThreads);
-		iscm_StreamedStore(buf, val.totalMemoryBytes);
-		iscm_StreamedStore(buf, val.networkBandwidth);
-		iscm_StreamedStore(buf, val.osType);
-		iscm_StreamedStore(buf, val.osDetail);
-		iscm_StreamedStore(buf, val.executeBits);
-	}
-#endif	// #ifndef PCC_Center_NodeDesc_STREAMED_FUNCTIONS_defined
 
 #ifndef PCC_ModuleTag_STREAMED_FUNCTIONS_defined
 	#define PCC_ModuleTag_STREAMED_FUNCTIONS_defined
@@ -1322,27 +1053,27 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 	}
 #endif	// #ifndef PCC_ModulePropWithKey_STREAMED_FUNCTIONS_defined
 
-#ifndef PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
-	#define PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_User_T::PCCProperty& val)
+#ifndef PCCProperty_STREAMED_FUNCTIONS_defined
+	#define PCCProperty_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCCProperty& val)
 	{
 		int size = 0;
 		size += iscm_GetStreamedSize(val.version);
 		return size;
 	}
-	inline void iscm_StreamedLoad(PCC_User_T::PCCProperty& val, const BYTE*& data)
+	inline void iscm_StreamedLoad(PCCProperty& val, const BYTE*& data)
 	{
 		iscm_StreamedLoad(val.version, data);
 	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_User_T::PCCProperty& val)
+	inline void iscm_StreamedStore(BYTE*& buf, const PCCProperty& val)
 	{
 		iscm_StreamedStore(buf, val.version);
 	}
-#endif	// #ifndef PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
+#endif	// #ifndef PCCProperty_STREAMED_FUNCTIONS_defined
 
-#ifndef PCC_User_NodeDesc_STREAMED_FUNCTIONS_defined
-	#define PCC_User_NodeDesc_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_User_T::NodeDesc& val)
+#ifndef NodeDesc_STREAMED_FUNCTIONS_defined
+	#define NodeDesc_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const NodeDesc& val)
 	{
 		int size = 0;
 		size += iscm_GetStreamedSize(val.name);
@@ -1357,7 +1088,7 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		size += (int)sizeof(val.executeBits);
 		return size;
 	}
-	inline void iscm_StreamedLoad(PCC_User_T::NodeDesc& val, const BYTE*& data)
+	inline void iscm_StreamedLoad(NodeDesc& val, const BYTE*& data)
 	{
 		iscm_StreamedLoad(val.name, data);
 		iscm_StreamedLoad(val.cpuType, data);
@@ -1370,7 +1101,7 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		iscm_StreamedLoad(val.osDetail, data);
 		iscm_StreamedLoad(val.executeBits, data);
 	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_User_T::NodeDesc& val)
+	inline void iscm_StreamedStore(BYTE*& buf, const NodeDesc& val)
 	{
 		iscm_StreamedStore(buf, val.name);
 		iscm_StreamedStore(buf, val.cpuType);
@@ -1383,6 +1114,90 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		iscm_StreamedStore(buf, val.osDetail);
 		iscm_StreamedStore(buf, val.executeBits);
 	}
-#endif	// #ifndef PCC_User_NodeDesc_STREAMED_FUNCTIONS_defined
+#endif	// #ifndef NodeDesc_STREAMED_FUNCTIONS_defined
+
+#ifndef PCC_ModelFile_STREAMED_FUNCTIONS_defined
+	#define PCC_ModelFile_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_ModelFile& val)
+	{
+		int size = 0;
+		size += iscm_GetStreamedSize(val.name);
+		return size;
+	}
+	inline void iscm_StreamedLoad(PCC_ModelFile& val, const BYTE*& data)
+	{
+		iscm_StreamedLoad(val.name, data);
+	}
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModelFile& val)
+	{
+		iscm_StreamedStore(buf, val.name);
+	}
+#endif	// #ifndef PCC_ModelFile_STREAMED_FUNCTIONS_defined
+
+#ifndef PCC_ModelTag_STREAMED_FUNCTIONS_defined
+	#define PCC_ModelTag_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_ModelTag& val)
+	{
+		int size = 0;
+		size += iscm_GetStreamedSize(val.name);
+		size += (int)sizeof(val.version);
+		return size;
+	}
+	inline void iscm_StreamedLoad(PCC_ModelTag& val, const BYTE*& data)
+	{
+		iscm_StreamedLoad(val.name, data);
+		iscm_StreamedLoad(val.version, data);
+	}
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModelTag& val)
+	{
+		iscm_StreamedStore(buf, val.name);
+		iscm_StreamedStore(buf, val.version);
+	}
+#endif	// #ifndef PCC_ModelTag_STREAMED_FUNCTIONS_defined
+
+#ifndef PCC_ModelProperty_STREAMED_FUNCTIONS_defined
+	#define PCC_ModelProperty_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_ModelProperty& val)
+	{
+		int size = 0;
+		size += iscm_GetStreamedSize(val.modelTag);
+		size += iscm_GetStreamedSize(val.description);
+		size += (int)sizeof(val.addTime);
+		return size;
+	}
+	inline void iscm_StreamedLoad(PCC_ModelProperty& val, const BYTE*& data)
+	{
+		iscm_StreamedLoad(val.modelTag, data);
+		iscm_StreamedLoad(val.description, data);
+		iscm_StreamedLoad(val.addTime, data);
+	}
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModelProperty& val)
+	{
+		iscm_StreamedStore(buf, val.modelTag);
+		iscm_StreamedStore(buf, val.description);
+		iscm_StreamedStore(buf, val.addTime);
+	}
+#endif	// #ifndef PCC_ModelProperty_STREAMED_FUNCTIONS_defined
+
+#ifndef PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
+	#define PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_ModelPropWithKey& val)
+	{
+		int size = 0;
+		size += (int)sizeof(val.key);
+		size += iscm_GetStreamedSize(val.prop);
+		return size;
+	}
+	inline void iscm_StreamedLoad(PCC_ModelPropWithKey& val, const BYTE*& data)
+	{
+		iscm_StreamedLoad(val.key, data);
+		iscm_StreamedLoad(val.prop, data);
+	}
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModelPropWithKey& val)
+	{
+		iscm_StreamedStore(buf, val.key);
+		iscm_StreamedStore(buf, val.prop);
+	}
+#endif	// #ifndef PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
 
 #endif	// #ifndef _PCC_CenterTypesDefine_h_
