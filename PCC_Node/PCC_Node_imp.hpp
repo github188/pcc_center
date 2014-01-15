@@ -4,6 +4,7 @@
 #include "osfunc.h"
 #include "CpuMem.h"
 #include "Register.h"
+#include "ipcvt.h"
 class PCC_Node : public PCC_Center
 {
 private:
@@ -60,7 +61,7 @@ protected:
 				) cacheable_callback
 	{
 		// TODO: 请实现此函数
-		
+		//staticContext.name = GetNameByIP();
 		staticContext.cpuType = PCC_CPU_X86_X64;
 		staticContext.cpuFreq = 0;
 		staticContext.cpuProcessors = 0;
@@ -250,7 +251,7 @@ protected:
 
 		dynamicContext.memoryUsage = GetMemUsageEx();
 		dynamicContext.cpuUsage	   = GetCpuUsageEx();
-		return TCPS_ERR_NOT_IMPLEMENTED;
+		return TCPS_OK;
 	}
 
 	virtual TCPSError AddModel(
@@ -282,36 +283,3 @@ protected:
 	}
 };
 
-class NodeBaseFacet : public BaseFacet
-{
-private:
-	NodeBaseFacet(const NodeBaseFacet&);
-	NodeBaseFacet& operator= (const NodeBaseFacet&);
-
-public:
-	NodeBaseFacet()
-		{}
-	virtual ~NodeBaseFacet()
-		{	DestroyRequester();	}
-
-/// 基本网络事件
-protected:
-	virtual TCPSError OnConnected()
-	{
-		// TODO: 请添加连接后处理
-		return TCPS_OK;
-	}
-	virtual void OnPeerBroken()
-	{
-		// TODO: 请添加对端断线处理
-	}
-	virtual void OnClose()
-	{
-		// TODO: 请添加连接关闭处理
-	}
-	virtual void OnConnectTimeout(IN TCPSError cause)
-	{
-		// TODO: 请添加连接超时处理
-		(void)cause;
-	}
-};

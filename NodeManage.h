@@ -6,7 +6,7 @@
 class CNodeManage//:public boost::enable_shared_from_this<CModuleManage>
 {
 public:
-typedef std::map<INT64,/*PCC_ModuleInfo*/PCC_Center_T::PCC_ModelProperty>::const_iterator MNG_IT;
+typedef std::map<INT64,/*PCC_ModuleInfo*/PCC_ModelProperty>::const_iterator MNG_IT;
 
 
 public:
@@ -14,7 +14,7 @@ public:
 	~CNodeManage(void);
 
 
-	bool find(INT64 key,PCC_Center_T::PCC_ModelProperty &info)
+	bool find(INT64 key,PCC_ModelProperty &info)
 	{
 		CNPAutoLock lok(m_lock_map);//必须加锁，否则it可能失效
 		MNG_IT it = m_models.find(key);
@@ -26,17 +26,17 @@ public:
 		return false;
 	}
 
-	bool insert(std::pair<INT64,PCC_Center_T::PCC_ModelProperty> const &  val)
+	bool insert(std::pair<INT64,PCC_ModelProperty> const &  val)
 	{
 		CNPAutoLock lok(m_lock_map);
-		std::map<INT64,PCC_Center_T::PCC_ModelProperty>::_Pairib rt = m_models.insert(val);
+		std::map<INT64,PCC_ModelProperty>::_Pairib rt = m_models.insert(val);
 		return rt.second;
 
 	}
    
 
 	TCPSError ListModels(
-		OUT tcps_Array<PCC_Center_T::PCC_ModelPropWithKey>& m_modelsInfo
+		OUT tcps_Array<PCC_ModelPropWithKey>& m_modelsInfo
 		) 
 	{
 		CNPAutoLock lok(m_lock_map);
@@ -95,9 +95,10 @@ public:
 	
 public:
 	void GetPccProperty(
-		PCC_Center_T::PCCProperty & pccProp
+		PCCProperty & pccProp
 				);
-	TCPSError ListNodes(tcps_Array<PCC_Center_T::NodeDesc>& nodes);
+	TCPSError ListNodes(tcps_Array<NodeDesc>& nodes);
+	TCPSError GetNodeDynamicContext(const tcps_String& nodeName, DynamicContext& dynamicContext); 
 //	void init();
 //	BOOL RegisterModules (const char *moduleDir);
 //	BOOL CopyModules (const char *moduleDir,tcps_Array<PCC_ModuleFile> &moudleFiles);
@@ -108,7 +109,7 @@ private:
 private:
 	CLocker m_lock_map;
 //	CLocker m_lock2;//scatter队列的锁
-	std::map<INT64,/*PCC_ModuleInfo*/PCC_Center_T::PCC_ModelProperty> m_models;
+	std::map<INT64,/*PCC_ModuleInfo*/PCC_ModelProperty> m_models;
 public:    
 	//INT64 m_lastkey;
     //INT64 m_jobkey;

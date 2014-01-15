@@ -10,7 +10,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	IPP ipp;
 	ipp.ip_ = inet_addr("127.0.0.1");
-	ipp.port_ = 9011;
+	ipp.port_ = 2011;
 	PCC_Node node;
 	
 	

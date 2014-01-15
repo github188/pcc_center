@@ -137,9 +137,7 @@ TCPSError PCC_User_S::GetPccProperty(
 				) method
 {
 	// TODO: 请实现此函数
-	PCC_Center_T::PCCProperty prop; 
-	pgrid_util::Singleton<CNodeManage>::instance().GetPccProperty(prop);
-	memcpy(&pccProp,&prop,sizeof(PCCProperty));
+	pgrid_util::Singleton<CNodeManage>::instance().GetPccProperty(pccProp);
 	return TCPS_OK;
 }
 
@@ -148,16 +146,20 @@ TCPSError PCC_User_S::ListNodes(
 				) method
 {
 	// TODO: 请实现此函数
-	return TCPS_ERR_NOT_IMPLEMENTED;
+	return pgrid_util::Singleton<CNodeManage>::instance().ListNodes(nodes);
 }
 
+//node_name 暂时用的senssionkey来区分（表示）
 TCPSError PCC_User_S::GetNodeDynamicContext(
 				IN const tcps_String& nodeName,
 				OUT DynamicContext& dynamicContext
 				) method
 {
 	// TODO: 请实现此函数
-	return TCPS_ERR_NOT_IMPLEMENTED;
+	//IPP ipp;
+	//this->GetPeerIPP(&ipp);
+
+	return pgrid_util::Singleton<CNodeManage>::instance().GetNodeDynamicContext(nodeName,dynamicContext);
 }
 
 TCPSError PCC_User_S::ListModules(
