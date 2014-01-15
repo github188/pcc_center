@@ -22,46 +22,46 @@ enum PCC_ModulePattern
 };
 #endif	// #ifndef PCC_ModulePattern_defined
 
-#ifndef PCC_ModuleVersion_defined
-#define PCC_ModuleVersion_defined
+#ifndef PCC_Version_defined
+#define PCC_Version_defined
 #pragma pack(push, 1)
-struct PCC_ModuleVersion
+struct PCC_Version
 {
 	INT32 major;
 	INT32 minor;
 	INT32 built;
 
-	PCC_ModuleVersion()
+	PCC_Version()
 	{
 		this->major = 0;
 		this->minor = 0;
 		this->built = 0;
 	}
 
-	int Compare(const PCC_ModuleVersion& r) const;
-	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModuleVersion)
+	int Compare(const PCC_Version& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_Version)
 };
 #pragma pack(pop) // #pragma pack(push, 1)
-#endif	// #ifndef PCC_ModuleVersion_defined
+#endif	// #ifndef PCC_Version_defined
 
-#ifndef PCC_ModuleTag_defined
-#define PCC_ModuleTag_defined
-struct PCC_ModuleTag
+#ifndef PCC_Tag_defined
+#define PCC_Tag_defined
+struct PCC_Tag
 {
 	tcps_String name;
-	PCC_ModuleVersion version;
+	PCC_Version version;
 
-	int Compare(const PCC_ModuleTag& r) const;
-	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModuleTag)
+	int Compare(const PCC_Tag& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_Tag)
 };
-#endif	// #ifndef PCC_ModuleTag_defined
+#endif	// #ifndef PCC_Tag_defined
 
 #ifndef PCC_ModuleIndex_defined
 #define PCC_ModuleIndex_defined
 struct PCC_ModuleIndex
 {
 	INT64 moduleKey;
-	PCC_ModuleTag moduleTag;
+	PCC_Tag moduleTag;
 
 	PCC_ModuleIndex()
 	{
@@ -126,7 +126,7 @@ enum PCC_ModuleLatency
 struct PCC_ModuleInfo
 {
 	INT64 moduleKey;
-	PCC_ModuleTag moduleTag;
+	PCC_Tag moduleTag;
 	INT32 modulePattern;
 	INT32 moduleType;
 	tcps_String description;
@@ -155,7 +155,7 @@ struct PCC_ModuleInfo
 #define PCC_ModuleProperty_defined
 struct PCC_ModuleProperty
 {
-	PCC_ModuleTag moduleTag;
+	PCC_Tag moduleTag;
 	INT32 modulePattern;
 	INT32 moduleFileType;
 	INT32 moduleType;
@@ -225,30 +225,19 @@ struct ExecuteState
 #pragma pack(pop) // #pragma pack(push, 1)
 #endif	// #ifndef ExecuteState_defined
 
-#ifndef PCCProperty_defined
-#define PCCProperty_defined
-struct PCCProperty
-{
-	tcps_String version;
-
-	int Compare(const PCCProperty& r) const;
-	ISCM_STRUCT_COMPARE_OPERATORS(PCCProperty)
-};
-#endif	// #ifndef PCCProperty_defined
-
-#ifndef CPUType_defined
-#define CPUType_defined
-enum CPUType
+#ifndef PCC_CPUType_defined
+#define PCC_CPUType_defined
+enum PCC_CPUType
 {
 	PCC_CPU_X86_X64 = 0,
 	PCC_CPU_ARM = 1,
 	PCC_CPU_MIPS = 2,
 };
-#endif	// #ifndef CPUType_defined
+#endif	// #ifndef PCC_CPUType_defined
 
-#ifndef OSType_defined
-#define OSType_defined
-enum OSType
+#ifndef PCC_OSType_defined
+#define PCC_OSType_defined
+enum PCC_OSType
 {
 	PCC_OS_WINDOWS = 0,
 	PCC_OS_LINUX = 1,
@@ -256,24 +245,24 @@ enum OSType
 	PCC_OS_ANDROID = 3,
 	PCC_OS_IOS = 4,
 };
-#endif	// #ifndef OSType_defined
+#endif	// #ifndef PCC_OSType_defined
 
-#ifndef NodeDesc_defined
-#define NodeDesc_defined
-struct NodeDesc
+#ifndef PCC_NodeDesc_defined
+#define PCC_NodeDesc_defined
+struct PCC_NodeDesc
 {
 	tcps_String name;
-	CPUType cpuType;
+	PCC_CPUType cpuType;
 	INT64 cpuFreq;
 	INT32 cpuProcessors;
 	INT32 cpuThreads;
 	INT64 totalMemoryBytes;
 	INT64 networkBandwidth;
-	OSType osType;
+	PCC_OSType osType;
 	tcps_String osDetail;
 	INT32 executeBits;
 
-	NodeDesc()
+	PCC_NodeDesc()
 	{
 		this->cpuType = PCC_CPU_X86_X64;
 		this->cpuFreq = 0;
@@ -285,32 +274,32 @@ struct NodeDesc
 		this->executeBits = 0;
 	}
 
-	int Compare(const NodeDesc& r) const;
-	ISCM_STRUCT_COMPARE_OPERATORS(NodeDesc)
+	int Compare(const PCC_NodeDesc& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_NodeDesc)
 };
-#endif	// #ifndef NodeDesc_defined
+#endif	// #ifndef PCC_NodeDesc_defined
 
-#ifndef DynamicContext_defined
-#define DynamicContext_defined
+#ifndef PCC_DynamicContext_defined
+#define PCC_DynamicContext_defined
 #pragma pack(push, 1)
-struct DynamicContext
+struct PCC_DynamicContext
 {
 	INT32 cpuUsage;
 	INT32 memoryUsage;
 	INT32 networkUsage;
 
-	DynamicContext()
+	PCC_DynamicContext()
 	{
 		this->cpuUsage = 0;
 		this->memoryUsage = 0;
 		this->networkUsage = 0;
 	}
 
-	int Compare(const DynamicContext& r) const;
-	ISCM_STRUCT_COMPARE_OPERATORS(DynamicContext)
+	int Compare(const PCC_DynamicContext& r) const;
+	ISCM_STRUCT_COMPARE_OPERATORS(PCC_DynamicContext)
 };
 #pragma pack(pop) // #pragma pack(push, 1)
-#endif	// #ifndef DynamicContext_defined
+#endif	// #ifndef PCC_DynamicContext_defined
 
 #ifndef PCC_ModelFile_defined
 #define PCC_ModelFile_defined
@@ -323,45 +312,11 @@ struct PCC_ModelFile
 };
 #endif	// #ifndef PCC_ModelFile_defined
 
-#ifndef PCC_ModelVersion_defined
-#define PCC_ModelVersion_defined
-#pragma pack(push, 1)
-struct PCC_ModelVersion
-{
-	INT32 major;
-	INT32 minor;
-	INT32 built;
-
-	PCC_ModelVersion()
-	{
-		this->major = 0;
-		this->minor = 0;
-		this->built = 0;
-	}
-
-	int Compare(const PCC_ModelVersion& r) const;
-	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelVersion)
-};
-#pragma pack(pop) // #pragma pack(push, 1)
-#endif	// #ifndef PCC_ModelVersion_defined
-
-#ifndef PCC_ModelTag_defined
-#define PCC_ModelTag_defined
-struct PCC_ModelTag
-{
-	tcps_String name;
-	PCC_ModelVersion version;
-
-	int Compare(const PCC_ModelTag& r) const;
-	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelTag)
-};
-#endif	// #ifndef PCC_ModelTag_defined
-
 #ifndef PCC_ModelProperty_defined
 #define PCC_ModelProperty_defined
 struct PCC_ModelProperty
 {
-	PCC_ModelTag modelTag;
+	PCC_Tag modelTag;
 	tcps_String description;
 	LTMSEL addTime;
 
@@ -436,12 +391,12 @@ struct IPCC_Center_LocalCallback : public iscm_ILocalCallbackBase, public PCC_Ce
 
 	typedef TCPSError (*FN_GetStaticContext)(
 				IN void* sessionObj_wrap,
-				OUT NodeDesc& staticContext
+				OUT PCC_NodeDesc& staticContext
 				) cacheable_callback;
 
 	typedef TCPSError (*FN_GetDynamicContext)(
 				IN void* sessionObj_wrap,
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) callback;
 
 	typedef TCPSError (*FN_AddModel)(
@@ -469,6 +424,14 @@ typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
 #define PCC_User_T_defined
 class PCC_User_T
 {
+public:
+	struct PCCProperty
+	{
+		tcps_String version;
+
+		int Compare(const PCCProperty& r) const;
+		ISCM_STRUCT_COMPARE_OPERATORS(PCCProperty)
+	};
 };
 
 struct IPCC_User_LocalMethod : public iscm_ILocalMethodBase, public PCC_User_T
@@ -490,13 +453,13 @@ struct IPCC_User_LocalMethod : public iscm_ILocalMethodBase, public PCC_User_T
 
 	typedef TCPSError (*FN_ListNodes)(
 				IN void* sessionObj_wrap,
-				OUT tcps_Array<NodeDesc>& nodes
+				OUT tcps_Array<PCC_NodeDesc>& nodes
 				) method;
 
 	typedef TCPSError (*FN_GetNodeDynamicContext)(
 				IN void* sessionObj_wrap,
 				IN const tcps_String& nodeName,
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) method;
 
 	typedef TCPSError (*FN_ListModules)(
@@ -566,9 +529,9 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 /////////////////////////////////////////////////////////////////////
 // 结构体的Compare()函数内联实现
 
-#ifndef PCC_ModuleVersion_Compare_defined
-	#define PCC_ModuleVersion_Compare_defined
-	inline int PCC_ModuleVersion::Compare(const PCC_ModuleVersion& r) const
+#ifndef PCC_Version_Compare_defined
+	#define PCC_Version_Compare_defined
+	inline int PCC_Version::Compare(const PCC_Version& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->major, r.major);
@@ -582,11 +545,11 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef PCC_ModuleVersion_Compare_defined
+#endif	// #ifndef PCC_Version_Compare_defined
 
-#ifndef PCC_ModuleTag_Compare_defined
-	#define PCC_ModuleTag_Compare_defined
-	inline int PCC_ModuleTag::Compare(const PCC_ModuleTag& r) const
+#ifndef PCC_Tag_Compare_defined
+	#define PCC_Tag_Compare_defined
+	inline int PCC_Tag::Compare(const PCC_Tag& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->name, r.name);
@@ -597,7 +560,7 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef PCC_ModuleTag_Compare_defined
+#endif	// #ifndef PCC_Tag_Compare_defined
 
 #ifndef PCC_ModuleIndex_Compare_defined
 	#define PCC_ModuleIndex_Compare_defined
@@ -731,21 +694,9 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 	}
 #endif	// #ifndef ExecuteState_Compare_defined
 
-#ifndef PCCProperty_Compare_defined
-	#define PCCProperty_Compare_defined
-	inline int PCCProperty::Compare(const PCCProperty& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->version, r.version);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCCProperty_Compare_defined
-
-#ifndef NodeDesc_Compare_defined
-	#define NodeDesc_Compare_defined
-	inline int NodeDesc::Compare(const NodeDesc& r) const
+#ifndef PCC_NodeDesc_Compare_defined
+	#define PCC_NodeDesc_Compare_defined
+	inline int PCC_NodeDesc::Compare(const PCC_NodeDesc& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->name, r.name);
@@ -780,11 +731,11 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef NodeDesc_Compare_defined
+#endif	// #ifndef PCC_NodeDesc_Compare_defined
 
-#ifndef DynamicContext_Compare_defined
-	#define DynamicContext_Compare_defined
-	inline int DynamicContext::Compare(const DynamicContext& r) const
+#ifndef PCC_DynamicContext_Compare_defined
+	#define PCC_DynamicContext_Compare_defined
+	inline int PCC_DynamicContext::Compare(const PCC_DynamicContext& r) const
 	{
 		int cmp = 0;
 		cmp = SimpleTypeCompare_(this->cpuUsage, r.cpuUsage);
@@ -798,7 +749,7 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 			return cmp;
 		return 0;
 	}
-#endif	// #ifndef DynamicContext_Compare_defined
+#endif	// #ifndef PCC_DynamicContext_Compare_defined
 
 #ifndef PCC_ModelFile_Compare_defined
 	#define PCC_ModelFile_Compare_defined
@@ -811,39 +762,6 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		return 0;
 	}
 #endif	// #ifndef PCC_ModelFile_Compare_defined
-
-#ifndef PCC_ModelVersion_Compare_defined
-	#define PCC_ModelVersion_Compare_defined
-	inline int PCC_ModelVersion::Compare(const PCC_ModelVersion& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->major, r.major);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->minor, r.minor);
-		if(0 != cmp)
-			return cmp;
-		cmp = SimpleTypeCompare_(this->built, r.built);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_ModelVersion_Compare_defined
-
-#ifndef PCC_ModelTag_Compare_defined
-	#define PCC_ModelTag_Compare_defined
-	inline int PCC_ModelTag::Compare(const PCC_ModelTag& r) const
-	{
-		int cmp = 0;
-		cmp = SimpleTypeCompare_(this->name, r.name);
-		if(0 != cmp)
-			return cmp;
-		cmp = this->version.Compare(r.version);
-		if(0 != cmp)
-			return cmp;
-		return 0;
-	}
-#endif	// #ifndef PCC_ModelTag_Compare_defined
 
 #ifndef PCC_ModelProperty_Compare_defined
 	#define PCC_ModelProperty_Compare_defined
@@ -878,30 +796,42 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 	}
 #endif	// #ifndef PCC_ModelPropWithKey_Compare_defined
 
+#ifndef PCC_User_PCCProperty_Compare_defined
+	#define PCC_User_PCCProperty_Compare_defined
+	inline int PCC_User_T::PCCProperty::Compare(const PCCProperty& r) const
+	{
+		int cmp = 0;
+		cmp = SimpleTypeCompare_(this->version, r.version);
+		if(0 != cmp)
+			return cmp;
+		return 0;
+	}
+#endif	// #ifndef PCC_User_PCCProperty_Compare_defined
+
 
 /////////////////////////////////////////////////////////////////////
 // 结构体的流式支持内联函数
 
-#ifndef PCC_ModuleTag_STREAMED_FUNCTIONS_defined
-	#define PCC_ModuleTag_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_ModuleTag& val)
+#ifndef PCC_Tag_STREAMED_FUNCTIONS_defined
+	#define PCC_Tag_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_Tag& val)
 	{
 		int size = 0;
 		size += iscm_GetStreamedSize(val.name);
 		size += (int)sizeof(val.version);
 		return size;
 	}
-	inline void iscm_StreamedLoad(PCC_ModuleTag& val, const BYTE*& data)
+	inline void iscm_StreamedLoad(PCC_Tag& val, const BYTE*& data)
 	{
 		iscm_StreamedLoad(val.name, data);
 		iscm_StreamedLoad(val.version, data);
 	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModuleTag& val)
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_Tag& val)
 	{
 		iscm_StreamedStore(buf, val.name);
 		iscm_StreamedStore(buf, val.version);
 	}
-#endif	// #ifndef PCC_ModuleTag_STREAMED_FUNCTIONS_defined
+#endif	// #ifndef PCC_Tag_STREAMED_FUNCTIONS_defined
 
 #ifndef PCC_ModuleIndex_STREAMED_FUNCTIONS_defined
 	#define PCC_ModuleIndex_STREAMED_FUNCTIONS_defined
@@ -1053,27 +983,9 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 	}
 #endif	// #ifndef PCC_ModulePropWithKey_STREAMED_FUNCTIONS_defined
 
-#ifndef PCCProperty_STREAMED_FUNCTIONS_defined
-	#define PCCProperty_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCCProperty& val)
-	{
-		int size = 0;
-		size += iscm_GetStreamedSize(val.version);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCCProperty& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.version, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCCProperty& val)
-	{
-		iscm_StreamedStore(buf, val.version);
-	}
-#endif	// #ifndef PCCProperty_STREAMED_FUNCTIONS_defined
-
-#ifndef NodeDesc_STREAMED_FUNCTIONS_defined
-	#define NodeDesc_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const NodeDesc& val)
+#ifndef PCC_NodeDesc_STREAMED_FUNCTIONS_defined
+	#define PCC_NodeDesc_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_NodeDesc& val)
 	{
 		int size = 0;
 		size += iscm_GetStreamedSize(val.name);
@@ -1088,7 +1000,7 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		size += (int)sizeof(val.executeBits);
 		return size;
 	}
-	inline void iscm_StreamedLoad(NodeDesc& val, const BYTE*& data)
+	inline void iscm_StreamedLoad(PCC_NodeDesc& val, const BYTE*& data)
 	{
 		iscm_StreamedLoad(val.name, data);
 		iscm_StreamedLoad(val.cpuType, data);
@@ -1101,7 +1013,7 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		iscm_StreamedLoad(val.osDetail, data);
 		iscm_StreamedLoad(val.executeBits, data);
 	}
-	inline void iscm_StreamedStore(BYTE*& buf, const NodeDesc& val)
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_NodeDesc& val)
 	{
 		iscm_StreamedStore(buf, val.name);
 		iscm_StreamedStore(buf, val.cpuType);
@@ -1114,7 +1026,7 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		iscm_StreamedStore(buf, val.osDetail);
 		iscm_StreamedStore(buf, val.executeBits);
 	}
-#endif	// #ifndef NodeDesc_STREAMED_FUNCTIONS_defined
+#endif	// #ifndef PCC_NodeDesc_STREAMED_FUNCTIONS_defined
 
 #ifndef PCC_ModelFile_STREAMED_FUNCTIONS_defined
 	#define PCC_ModelFile_STREAMED_FUNCTIONS_defined
@@ -1133,27 +1045,6 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		iscm_StreamedStore(buf, val.name);
 	}
 #endif	// #ifndef PCC_ModelFile_STREAMED_FUNCTIONS_defined
-
-#ifndef PCC_ModelTag_STREAMED_FUNCTIONS_defined
-	#define PCC_ModelTag_STREAMED_FUNCTIONS_defined
-	inline int iscm_GetStreamedSize(const PCC_ModelTag& val)
-	{
-		int size = 0;
-		size += iscm_GetStreamedSize(val.name);
-		size += (int)sizeof(val.version);
-		return size;
-	}
-	inline void iscm_StreamedLoad(PCC_ModelTag& val, const BYTE*& data)
-	{
-		iscm_StreamedLoad(val.name, data);
-		iscm_StreamedLoad(val.version, data);
-	}
-	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModelTag& val)
-	{
-		iscm_StreamedStore(buf, val.name);
-		iscm_StreamedStore(buf, val.version);
-	}
-#endif	// #ifndef PCC_ModelTag_STREAMED_FUNCTIONS_defined
 
 #ifndef PCC_ModelProperty_STREAMED_FUNCTIONS_defined
 	#define PCC_ModelProperty_STREAMED_FUNCTIONS_defined
@@ -1199,5 +1090,23 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		iscm_StreamedStore(buf, val.prop);
 	}
 #endif	// #ifndef PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
+
+#ifndef PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
+	#define PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_User_T::PCCProperty& val)
+	{
+		int size = 0;
+		size += iscm_GetStreamedSize(val.version);
+		return size;
+	}
+	inline void iscm_StreamedLoad(PCC_User_T::PCCProperty& val, const BYTE*& data)
+	{
+		iscm_StreamedLoad(val.version, data);
+	}
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_User_T::PCCProperty& val)
+	{
+		iscm_StreamedStore(buf, val.version);
+	}
+#endif	// #ifndef PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
 
 #endif	// #ifndef _PCC_CenterTypesDefine_h_

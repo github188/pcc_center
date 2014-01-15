@@ -270,7 +270,7 @@ protected:
 
 protected:
 	virtual TCPSError GetStaticContext(
-				OUT NodeDesc& staticContext
+				OUT PCC_NodeDesc& staticContext
 				) cacheable_callback
 	{	// TODO: 请在派生类中重载此函数
 		(void)staticContext;
@@ -279,7 +279,7 @@ protected:
 
 protected:
 	virtual TCPSError GetDynamicContext(
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) callback
 	{	// TODO: 请在派生类中重载此函数
 		(void)dynamicContext;
@@ -429,12 +429,12 @@ private:
 
 	static TCPSError Local_GetStaticContext(
 				IN void* sessionObj_wrap,
-				OUT NodeDesc& staticContext
+				OUT PCC_NodeDesc& staticContext
 				) cacheable_callback;
 
 	static TCPSError Local_GetDynamicContext(
 				IN void* sessionObj_wrap,
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) callback;
 
 	static TCPSError Local_AddModel(

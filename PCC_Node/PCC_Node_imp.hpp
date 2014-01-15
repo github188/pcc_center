@@ -57,7 +57,7 @@ protected:
 	}
 
 	virtual TCPSError GetStaticContext(
-				OUT NodeDesc& staticContext
+				OUT PCC_NodeDesc& staticContext
 				) cacheable_callback
 	{
 		// TODO: 请实现此函数
@@ -160,7 +160,7 @@ protected:
 		*/
 		if (ok)
 		{
-			staticContext.cpuFreq = (INT64)cpuFreq * 100000;
+			staticContext.cpuFreq = (INT64)cpuFreq * 1000000;
 		}
 		else
 		{
@@ -241,18 +241,18 @@ protected:
 	 */
 	staticContext.networkBandwidth = 100;
 		return TCPS_OK;
+	
 	}
 
 	virtual TCPSError GetDynamicContext(
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) callback
 	{
 		// TODO: 请实现此函数
-
 		dynamicContext.memoryUsage = GetMemUsageEx();
 		dynamicContext.cpuUsage	   = GetCpuUsageEx();
 		return TCPS_OK;
-	}
+    }
 
 	virtual TCPSError AddModel(
 				IN const PCC_ModelProperty& moduleProperty,
@@ -282,4 +282,3 @@ protected:
 		return TCPS_OK;
 	}
 };
-

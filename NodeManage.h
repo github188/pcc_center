@@ -95,10 +95,10 @@ public:
 	
 public:
 	void GetPccProperty(
-		PCCProperty & pccProp
+		PCC_User_T::PCCProperty & pccProp
 				);
-	TCPSError ListNodes(tcps_Array<NodeDesc>& nodes);
-	TCPSError GetNodeDynamicContext(const tcps_String& nodeName, DynamicContext& dynamicContext); 
+	TCPSError ListNodes(tcps_Array<PCC_NodeDesc>& nodes);
+	TCPSError GetNodeDynamicContext(const tcps_String& nodeName, PCC_DynamicContext& dynamicContext); 
 //	void init();
 //	BOOL RegisterModules (const char *moduleDir);
 //	BOOL CopyModules (const char *moduleDir,tcps_Array<PCC_ModuleFile> &moudleFiles);

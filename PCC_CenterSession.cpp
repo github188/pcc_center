@@ -142,17 +142,16 @@ TCPSError PCC_User_S::GetPccProperty(
 }
 
 TCPSError PCC_User_S::ListNodes(
-				OUT tcps_Array<NodeDesc>& nodes
+				OUT tcps_Array<PCC_NodeDesc>& nodes
 				) method
 {
 	// TODO: 请实现此函数
 	return pgrid_util::Singleton<CNodeManage>::instance().ListNodes(nodes);
 }
 
-//node_name 暂时用的senssionkey来区分（表示）
 TCPSError PCC_User_S::GetNodeDynamicContext(
 				IN const tcps_String& nodeName,
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) method
 {
 	// TODO: 请实现此函数

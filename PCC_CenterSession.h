@@ -212,12 +212,12 @@ public:
 
 public:
 	TCPSError GetStaticContext(
-				OUT NodeDesc& staticContext
+				OUT PCC_NodeDesc& staticContext
 				) cacheable_callback;
 
 public:
 	TCPSError GetDynamicContext(
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) callback;
 
 public:
@@ -338,7 +338,7 @@ private:
 	{
 		BOOL needUpdate;
 		TCPSError lastRet;
-		NodeDesc staticContext_c_;
+		PCC_NodeDesc staticContext_c_;
 		TCache_GetStaticContext()
 			: needUpdate(true), lastRet(TCPS_ERROR)
 			{}
@@ -542,13 +542,13 @@ private:
 
 private:
 	TCPSError ListNodes(
-				OUT tcps_Array<NodeDesc>& nodes
+				OUT tcps_Array<PCC_NodeDesc>& nodes
 				) method;
 
 private:
 	TCPSError GetNodeDynamicContext(
 				IN const tcps_String& nodeName,
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) method;
 
 private:

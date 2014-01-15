@@ -51,7 +51,7 @@ protected:
 	}
 
 	virtual TCPSError GetStaticContext(
-				OUT NodeDesc& staticContext
+				OUT PCC_NodeDesc& staticContext
 				) cacheable_callback
 	{
 		// TODO: 请实现此函数
@@ -59,7 +59,7 @@ protected:
 	}
 
 	virtual TCPSError GetDynamicContext(
-				OUT DynamicContext& dynamicContext
+				OUT PCC_DynamicContext& dynamicContext
 				) callback
 	{
 		// TODO: 请实现此函数
