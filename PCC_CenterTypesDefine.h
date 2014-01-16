@@ -419,6 +419,142 @@ typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
 			);
 #endif	// #ifndef PCC_Center_T_defined
 
+// 'class PCC_Deploy_T'用于定义接口'PCC_Deploy'的局部类型
+#ifndef PCC_Deploy_T_defined
+#define PCC_Deploy_T_defined
+class PCC_Deploy_T
+{
+};
+
+struct IPCC_Deploy_LocalMethod : public iscm_ILocalMethodBase, public PCC_Deploy_T
+{
+	typedef TCPSError (*FN_OnStreamedCall_L_)(
+				IN void* sessionObj,
+				IN const char* methodName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+
+	typedef TCPSError (*FN_Login)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& ticket
+				) method;
+
+	typedef TCPSError (*FN_Logout)(
+				IN void* sessionObj_wrap
+				) method;
+
+	typedef TCPSError (*FN_CreateTrunk)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk
+				) method;
+
+	typedef TCPSError (*FN_RemoveTrunk)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk
+				) method;
+
+	typedef TCPSError (*FN_ListTrunk)(
+				IN void* sessionObj_wrap,
+				OUT tcps_Array<tcps_String>& trunks
+				) method;
+
+	typedef TCPSError (*FN_AddAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag,
+				IN const tcps_Array<PCC_ModuleFile>& files
+				) method;
+
+	typedef TCPSError (*FN_RemoveAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag
+				) method;
+
+	typedef TCPSError (*FN_ListAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				OUT tcps_Array<PCC_Tag>& authTags
+				) method;
+
+	typedef TCPSError (*FN_FindAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag
+				) method;
+
+	typedef TCPSError (*FN_AddModule)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_ModuleProperty& moduleProperty,
+				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
+				OUT INT64& moduleKey
+				) method;
+
+	typedef TCPSError (*FN_AddModuleFile)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey,
+				IN PCC_ModuleFileType fileType,
+				IN const tcps_Array<PCC_ModuleFile>& moduleFiles
+				) method;
+
+	typedef TCPSError (*FN_RemoveModule)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey
+				) method;
+
+	typedef TCPSError (*FN_RemoveModuleFiles)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey,
+				IN INT32 fileType
+				) method;
+
+	typedef TCPSError (*FN_ListModules)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				OUT tcps_Array<PCC_ModulePropWithKey>& modulesInfo
+				) method;
+
+	typedef TCPSError (*FN_AddModel)(
+				IN void* sessionObj_wrap,
+				IN const PCC_ModelProperty& moduleProperty,
+				IN const tcps_Array<PCC_ModelFile>& modelFiles
+				) method;
+
+	typedef TCPSError (*FN_DelModel)(
+				IN void* sessionObj_wrap,
+				IN INT64 modelKey
+				) method;
+};
+
+struct IPCC_Deploy_LocalCallback : public iscm_ILocalCallbackBase, public PCC_Deploy_T
+{
+	typedef TCPSError (*FN_OnStreamedCallback_L_)(
+				IN void* sessionObj,
+				IN const char* callbackName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+};
+
+typedef TCPSError (*FNMakeLocalSession_PCC_Deploy)(
+			IN const IPP& clientID_IPP,
+			IN PCC_CenterSessionMaker& sessionMaker,
+			OUT IPCC_Deploy_LocalMethod*& methodHandler,
+			IN IPCC_Deploy_LocalCallback* callbackHandler
+			);
+#endif	// #ifndef PCC_Deploy_T_defined
+
 // 'class PCC_User_T'用于定义接口'PCC_User'的局部类型
 #ifndef PCC_User_T_defined
 #define PCC_User_T_defined

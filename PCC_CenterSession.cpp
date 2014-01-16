@@ -72,6 +72,212 @@ void PCC_Center_S::OnClose(
 }
 
 /////////////////////////////////////////////////////////////////////
+// interface PCC_Deploy
+
+PCC_Deploy_S::PCC_Deploy_S(PCC_CenterSessionMaker& sessionMaker, PCC_CenterSession* sessionR, IPCC_Deploy_LocalCallback* sessionL)
+	: m_sessionMaker(sessionMaker), m_sessionR(sessionR), m_sessionL(sessionL)
+{
+	NPR_ASSERT((NULL==sessionR) != (NULL==sessionL)); // 有且只能为一种模式
+	// TODO: 请添加PCC_Deploy的构造处理
+}
+
+PCC_Deploy_S::~PCC_Deploy_S()
+{
+	// TODO: 请添加PCC_Deploy的析构处理
+}
+
+TCPSError PCC_Deploy_S::OnConnected(
+				IN INT32 sessionKey,
+				IN const IPP& peerID_IPP,
+				IN INT32 sessionCount
+				)
+{
+	// TODO: 请添加接口PCC_Deploy的连接后处理
+
+	NPLogInfo(("PCC_Deploy_S::OnConnected(%d, %s, %d)", sessionKey, IPP_TO_STR_A(peerID_IPP), sessionCount));
+	return m_deploy.OnConnected(sessionKey,peerID_IPP,sessionCount);
+	
+}
+
+void PCC_Deploy_S::OnCallbackReady()
+{
+	// TODO: 请添加接口PCC_Deploy的回调就绪处理
+
+	NPLogInfo(("PCC_Deploy_S::OnCallbackReady()"));
+}
+
+void PCC_Deploy_S::OnPostingCallReady()
+{
+	// TODO: 请添加接口PCC_Deploy的posting回调就绪处理
+
+	NPLogInfo(("PCC_Deploy_S::OnPostingCallReady()"));
+}
+
+void PCC_Deploy_S::OnPeerBroken(
+				IN INT32 sessionKey,
+				IN const IPP& peerID_IPP,
+				IN TCPSError cause
+				)
+{
+	NPLogInfo(("PCC_Deploy_S::OnPeerBroken(%d, %s, %s(%d))", sessionKey, IPP_TO_STR_A(peerID_IPP), tcps_GetErrTxt(cause), cause));
+	// TODO: 请添加接口PCC_Deploy的对端断线处理
+}
+
+void PCC_Deploy_S::OnClose(
+				IN INT32 sessionKey,
+				IN const IPP& peerID_IPP,
+				IN TCPSError cause
+				)
+{
+	NPLogInfo(("PCC_Deploy_S::OnClose(%d, %s, %s(%d))", sessionKey, IPP_TO_STR_A(peerID_IPP), tcps_GetErrTxt(cause), cause));
+	// TODO: 请添加接口PCC_Deploy的连接关闭处理
+	m_deploy.OnClose(sessionKey,peerID_IPP,cause);
+}
+
+TCPSError PCC_Deploy_S::Login(
+				IN const tcps_String& ticket
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.Login(ticket);	
+}
+
+TCPSError PCC_Deploy_S::Logout(
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.Logout();
+}
+
+TCPSError PCC_Deploy_S::CreateTrunk(
+				IN const tcps_String& trunk
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.CreateTrunk(trunk);
+}
+
+TCPSError PCC_Deploy_S::RemoveTrunk(
+				IN const tcps_String& trunk
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.RemoveTrunk(trunk);
+}
+
+TCPSError PCC_Deploy_S::ListTrunk(
+				OUT tcps_Array<tcps_String>& trunks
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.ListTrunk(trunks);
+}
+
+TCPSError PCC_Deploy_S::AddAuthCenter(
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag,
+				IN const tcps_Array<PCC_ModuleFile>& files
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.AddAuthCenter(trunk,authTag,files);
+}
+
+TCPSError PCC_Deploy_S::RemoveAuthCenter(
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.RemoveAuthCenter(trunk,authTag);
+}
+
+TCPSError PCC_Deploy_S::ListAuthCenter(
+				IN const tcps_String& trunk,
+				OUT tcps_Array<PCC_Tag>& authTags
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.ListAuthCenter(trunk,authTags);
+}
+
+TCPSError PCC_Deploy_S::FindAuthCenter(
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.FindAuthCenter(trunk,authTag);
+}
+
+TCPSError PCC_Deploy_S::AddModule(
+				IN const tcps_String& trunk,
+				IN const PCC_ModuleProperty& moduleProperty,
+				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
+				OUT INT64& moduleKey
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.AddModule(trunk,moduleProperty,moudleFiles,moduleKey);
+}
+
+TCPSError PCC_Deploy_S::AddModuleFile(
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey,
+				IN PCC_ModuleFileType fileType,
+				IN const tcps_Array<PCC_ModuleFile>& moduleFiles
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.AddModuleFile(trunk,moduleKey,fileType,moduleFiles);
+}
+
+TCPSError PCC_Deploy_S::RemoveModule(
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.RemoveModule(trunk,moduleKey);
+}
+
+TCPSError PCC_Deploy_S::RemoveModuleFiles(
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey,
+				IN INT32 fileType
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.RemoveModuleFiles(trunk,moduleKey,fileType);
+}
+
+TCPSError PCC_Deploy_S::ListModules(
+				IN const tcps_String& trunk,
+				OUT tcps_Array<PCC_ModulePropWithKey>& modulesInfo
+				) method
+{
+	// TODO: 请实现此函数
+	return m_deploy.ListModules(trunk,modulesInfo);
+}
+
+TCPSError PCC_Deploy_S::AddModel(
+				IN const PCC_ModelProperty& moduleProperty,
+				IN const tcps_Array<PCC_ModelFile>& modelFiles
+				) method
+{
+	// TODO: 请实现此函数
+	return TCPS_ERR_NOT_IMPLEMENTED;
+}
+
+TCPSError PCC_Deploy_S::DelModel(
+				IN INT64 modelKey
+				) method
+{
+	// TODO: 请实现此函数
+	return TCPS_ERR_NOT_IMPLEMENTED;
+}
+
+/////////////////////////////////////////////////////////////////////
 // interface PCC_User
 
 PCC_User_S::PCC_User_S(PCC_CenterSessionMaker& sessionMaker, PCC_CenterSession* sessionR, IPCC_User_LocalCallback* sessionL)

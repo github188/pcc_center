@@ -8,7 +8,7 @@
 #include "nplog.h"
 #include "rpc_serve.h"
 #include "PCC_CenterSession.h"
-
+#include "pcc_startup.h"
 int g_majorVer = 1;
 int g_minorVer = 0;
 int g_thirdVer = 0;
@@ -57,6 +57,17 @@ int main(int argc, const char* argv[])
 	}
 	g_serveIPP.port_ = tcpPort;
 
+	//用户定义_S
+
+	CPCC_Startup pcc;
+	int rt_st = pcc.Startup();
+	if(rt_st < 0)
+	{
+		return rt_st;
+	}
+	//
+
+	//用户定义_E
 	// 设置基本系统参数
 #if defined(WIN32)
 	SetCurrentDirectory(GetExeDir());

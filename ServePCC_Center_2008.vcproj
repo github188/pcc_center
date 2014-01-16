@@ -1259,6 +1259,14 @@
 			Name="nw"
 			>
 			<File
+				RelativePath=".\ModelManage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ModelManage.h"
+				>
+			</File>
+			<File
 				RelativePath=".\NodeManage.cpp"
 				>
 			</File>
@@ -1267,12 +1275,44 @@
 				>
 			</File>
 			<File
+				RelativePath=".\NP_GridUtils.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PCC_Startup.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PCC_Startup.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Singleton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TrunkManage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TrunkManage.h"
 				>
 			</File>
 		</Filter>
 		<File
 			RelativePath=".\Makefile"
+			>
+		</File>
+		<File
+			RelativePath=".\NP_GridUtils.lib"
+			>
+		</File>
+		<File
+			RelativePath=".\sqlite382.lib"
 			>
 		</File>
 	</Files>
