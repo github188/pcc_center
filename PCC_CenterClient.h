@@ -597,7 +597,7 @@ public:
 			BOOL isPosting;
 			Info(BOOL* p, BOOL is) : pMatchingVar(p), isPosting(is) {}
 		};
-		typedef tcps_QuickStringMap<CPtrStrA, Info, 18> MethodMap;
+		typedef tcps_QuickStringMap<CPtrStrA, Info, 19> MethodMap;
 		MethodMap mmap_;
 		BOOL matching_Login;
 		BOOL matching_Logout;
@@ -614,6 +614,7 @@ public:
 		BOOL matching_RemoveModuleFiles;
 		BOOL matching_ListModules;
 		BOOL matching_AddModel;
+		BOOL matching_ListModels;
 		BOOL matching_DelModel;
 		BOOL matching_SetTimeout_;
 		BOOL matching_SetSessionBufferSize_;
@@ -1050,18 +1051,23 @@ public:
 
 public:
 	TCPSError AddModel(
-				IN const PCC_ModelProperty& moduleProperty,
+				IN const PCC_ModelProperty& modelProperty,
 				IN const tcps_Array<PCC_ModelFile>& modelFiles
 				) method;
 	TCPSError AddModel(
-				IN const PCC_ModelProperty& moduleProperty,
+				IN const PCC_ModelProperty& modelProperty,
 				IN const PCC_ModelFile* modelFiles, IN INT32 modelFiles_count
 				) method
 		{	return this->AddModel(
-							moduleProperty,
+							modelProperty,
 							tcps_Array<PCC_ModelFile>(xat_bind, (PCC_ModelFile*)modelFiles, modelFiles_count)
 							);
 		}
+
+public:
+	TCPSError ListModels(
+				OUT tcps_Array<PCC_ModelPropWithKey>& modelsInfo
+				) method;
 
 public:
 	TCPSError DelModel(
@@ -1107,6 +1113,7 @@ private:
 		PROC fnRemoveModuleFiles;
 		PROC fnListModules;
 		PROC fnAddModel;
+		PROC fnListModels;
 		PROC fnDelModel;
 		CallSiteL_()
 			: needUpdateFlags(true)
@@ -1126,6 +1133,7 @@ private:
 			, fnRemoveModuleFiles(NULL)
 			, fnListModules(NULL)
 			, fnAddModel(NULL)
+			, fnListModels(NULL)
 			, fnDelModel(NULL)
 			{}
 		void Reset()
@@ -1148,6 +1156,7 @@ private:
 			fnRemoveModuleFiles = NULL;
 			fnListModules = NULL;
 			fnAddModel = NULL;
+			fnListModels = NULL;
 			fnDelModel = NULL;
 		}
 	};

@@ -619,8 +619,13 @@ private:
 
 private:
 	TCPSError AddModel(
-				IN const PCC_ModelProperty& moduleProperty,
+				IN const PCC_ModelProperty& modelProperty,
 				IN const tcps_Array<PCC_ModelFile>& modelFiles
+				) method;
+
+private:
+	TCPSError ListModels(
+				OUT tcps_Array<PCC_ModelPropWithKey>& modelsInfo
 				) method;
 
 private:
@@ -1363,6 +1368,7 @@ private:
 	static TCPSError Wrap_PCC_Deploy_RemoveModuleFiles(PCC_CenterSession*, void*, iscm_PeerCallFlags, const BYTE*&, INT_PTR&, iscm_IRPCOutfiter*) method;
 	static TCPSError Wrap_PCC_Deploy_ListModules(PCC_CenterSession*, void*, iscm_PeerCallFlags, const BYTE*&, INT_PTR&, iscm_IRPCOutfiter*) method;
 	static TCPSError Wrap_PCC_Deploy_AddModel(PCC_CenterSession*, void*, iscm_PeerCallFlags, const BYTE*&, INT_PTR&, iscm_IRPCOutfiter*) method;
+	static TCPSError Wrap_PCC_Deploy_ListModels(PCC_CenterSession*, void*, iscm_PeerCallFlags, const BYTE*&, INT_PTR&, iscm_IRPCOutfiter*) method;
 	static TCPSError Wrap_PCC_Deploy_DelModel(PCC_CenterSession*, void*, iscm_PeerCallFlags, const BYTE*&, INT_PTR&, iscm_IRPCOutfiter*) method;
 	static TCPSError Wrap_PCC_Deploy_SetTimeout_(PCC_CenterSession*, void*, iscm_PeerCallFlags, const BYTE*&, INT_PTR&, iscm_IRPCOutfiter*) posting_method;
 	static TCPSError Wrap_PCC_Deploy_SetSessionBufferSize_(PCC_CenterSession*, void*, iscm_PeerCallFlags, const BYTE*&, INT_PTR&, iscm_IRPCOutfiter*) posting_method;

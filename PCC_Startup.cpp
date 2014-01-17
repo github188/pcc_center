@@ -7,6 +7,7 @@
 //#include "modulemanage.h"
 #include "npfdk.h"
 #include "TrunkManage.h"
+#include "modelmanage.h"
 class PCC_Scatter_S;
 CPCC_Startup::CPCC_Startup(void)
 {
@@ -146,7 +147,28 @@ int CPCC_Startup::Startup()
 	//scatterd Ä£¿éÄ¿Â¼
 
 	pgrid_util::Singleton<CTrunkManage>::instance();//.init();//
+	pgrid_util::Singleton<CModelManage>::instance().init();
+	PCC_ModelProperty modelProperty;
+	modelProperty.modelTag.name = "mmodel0";
+	modelProperty.modelTag.version.major = 1;
+	modelProperty.modelTag.version.minor = 2;	
+	FILE *fp;
+	fp = fopen(
+		"C:/Users/niwho/Documents/My RTX Files/niwho/Grid.cnp"//face_togpl(1)test.json
+		,"rb"); 
+	fseek(fp,0,SEEK_END);//48£º6254
 
+	long file_len = ftell(fp);
+	fseek(fp,0,SEEK_SET);
+	
+	tcps_Array<PCC_ModelFile> modelFiles;
+	modelFiles.Resize(1);
+	modelFiles[0].data.Resize(file_len);
+	fread(modelFiles[0].data.Get(),file_len,1,fp);
+	modelFiles[0].name = "Grid.cnp";
+	//moudleFiles[0].entry = TRUE;
+	fclose(fp);
+	pgrid_util::Singleton<CModelManage>::instance().AddModel(modelProperty,modelFiles);
 //	tcps_String trunk;
 //	trunk.Assign("wtttt2");
 //	int rt;

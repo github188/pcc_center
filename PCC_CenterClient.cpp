@@ -108,6 +108,9 @@ static int s_PCC_Deploy_ListModules_TypeInfo_len_ = 0;
 static const char* s_PCC_Deploy_AddModel_TypeInfo_ = NULL;
 static int s_PCC_Deploy_AddModel_TypeInfo_len_ = 0;
 
+static const char* s_PCC_Deploy_ListModels_TypeInfo_ = NULL;
+static int s_PCC_Deploy_ListModels_TypeInfo_len_ = 0;
+
 static const char* s_PCC_Deploy_DelModel_TypeInfo_ = NULL;
 static int s_PCC_Deploy_DelModel_TypeInfo_len_ = 0;
 
@@ -250,14 +253,14 @@ static INT_PTR InitializeAllCallsTypeInfo_()
 	{
 		BYTE const chZipped[] =
 		{
-			0xB1,0x00,0x00,0x80,0x78,0x01,0x0B,0x70,0x76,0x8E,0xF7,0xCD,0x4F,0x49,0xCD,0x71,
-			0xCB,0xCC,0x49,0x55,0x29,0x2E,0x29,0xCA,0xCC,0x4B,0xD7,0xB1,0x0E,0x80,0x89,0x06,
-			0x14,0xE5,0x17,0xA4,0x16,0x95,0x54,0xAA,0x80,0x44,0x42,0x12,0xD3,0x75,0xA0,0x2A,
-			0x7C,0x42,0x7C,0x83,0x5D,0x7D,0x20,0x0A,0x81,0xC2,0x30,0x8D,0x20,0x55,0x61,0xA9,
-			0x45,0xC5,0x99,0xF9,0x79,0x10,0x39,0x28,0x47,0xC5,0xD3,0x2F,0xC4,0xD8,0x48,0x07,
-			0x99,0xB4,0x4E,0x4E,0xCC,0xC9,0x49,0x4A,0x4C,0xCE,0xAE,0xF1,0xF4,0xAB,0xC1,0xB0,
-			0x0F,0xA8,0xB4,0x26,0xB1,0xA8,0x28,0xB1,0xD2,0x06,0x2E,0x05,0x72,0xA0,0x9D,0x0E,
-			0x03,0x00,0x2E,0xC4,0x3C,0x89,
+			0xB8,0x00,0x00,0x80,0x78,0x01,0x0B,0x70,0x76,0x8E,0xF7,0xCD,0x4F,0x49,0xCD,0x71,
+			0xCB,0xCC,0x49,0x55,0x29,0x2E,0x29,0xCA,0xCC,0x4B,0xD7,0x49,0xCA,0xCC,0x4B,0x2C,
+			0xAA,0xD4,0xB1,0x0E,0x80,0x49,0x06,0x14,0xE5,0x17,0xA4,0x16,0x95,0x54,0xAA,0x80,
+			0x44,0x42,0x12,0xD3,0x75,0xA0,0x0A,0x7D,0x42,0x7C,0x83,0x5D,0x7D,0x20,0x0A,0x81,
+			0xC2,0x30,0xFD,0x20,0x55,0x61,0xA9,0x45,0xC5,0x99,0xF9,0x79,0x10,0x39,0x28,0x47,
+			0xC5,0xD3,0x2F,0xC4,0xD8,0x48,0x07,0x99,0xB4,0x4E,0x4E,0xCC,0xC9,0x49,0x4A,0x4C,
+			0xCE,0xAE,0xF1,0xF4,0xAB,0xC1,0xB0,0x0F,0xA8,0xB4,0x26,0xB1,0xA8,0x28,0xB1,0xD2,
+			0x06,0x2E,0x05,0x72,0xA7,0x9D,0x0E,0x03,0x00,0x12,0xE2,0x3F,0x3A,
 		};
 		static CBinary idTxt;
 		CBinary& bin = idTxt;
@@ -608,20 +611,39 @@ static INT_PTR InitializeAllCallsTypeInfo_()
 	{
 		BYTE const chZipped[] =
 		{
-			0xAF,0x00,0x00,0x80,0x78,0x01,0x0B,0x70,0x76,0x8E,0xF7,0xCD,0x4F,0x49,0xCD,0x71,
-			0xCB,0xCC,0x49,0x55,0x29,0x2E,0x29,0xCA,0xCC,0x4B,0xD7,0xB1,0x0E,0x80,0x89,0x06,
-			0x14,0xE5,0x17,0xA4,0x16,0x95,0x54,0xAA,0x80,0x44,0x42,0x12,0xD3,0x75,0xA0,0x2A,
-			0x7C,0x42,0x7C,0x83,0x5D,0x7D,0x20,0x0A,0x81,0xC2,0x30,0x8D,0x20,0x55,0x61,0xA9,
-			0x45,0xC5,0x99,0xF9,0x79,0x10,0x39,0x28,0x47,0xC5,0xD3,0x2F,0xC4,0xD8,0x48,0x07,
-			0x99,0xB4,0xCE,0x4D,0x2D,0xC9,0xC8,0x4F,0xA9,0xF1,0xF4,0xAB,0xC1,0xB0,0x0D,0xA8,
-			0xB0,0x26,0xB1,0xA8,0x28,0xB1,0xD2,0x06,0x2E,0x05,0x72,0x9E,0x9D,0x0E,0x03,0x00,
-			0xB8,0x83,0x3B,0xDD,
+			0xB6,0x00,0x00,0x80,0x78,0x01,0x0B,0x70,0x76,0x8E,0xF7,0xCD,0x4F,0x49,0xCD,0x71,
+			0xCB,0xCC,0x49,0x55,0x29,0x2E,0x29,0xCA,0xCC,0x4B,0xD7,0x49,0xCA,0xCC,0x4B,0x2C,
+			0xAA,0xD4,0xB1,0x0E,0x80,0x49,0x06,0x14,0xE5,0x17,0xA4,0x16,0x95,0x54,0xAA,0x80,
+			0x44,0x42,0x12,0xD3,0x75,0xA0,0x0A,0x7D,0x42,0x7C,0x83,0x5D,0x7D,0x20,0x0A,0x81,
+			0xC2,0x30,0xFD,0x20,0x55,0x61,0xA9,0x45,0xC5,0x99,0xF9,0x79,0x10,0x39,0x28,0x47,
+			0xC5,0xD3,0x2F,0xC4,0xD8,0x48,0x07,0x99,0xB4,0xCE,0x4D,0x2D,0xC9,0xC8,0x4F,0xA9,
+			0xF1,0xF4,0xAB,0xC1,0xB0,0x0D,0xA8,0xB0,0x26,0xB1,0xA8,0x28,0xB1,0xD2,0x06,0x2E,
+			0x05,0x72,0xA5,0x9D,0x0E,0x03,0x00,0x97,0x3F,0x3E,0x8E,
 		};
 		static CBinary idTxt;
 		CBinary& bin = idTxt;
 		VERIFY(QuickUnzip(chZipped, sizeof(chZipped), bin));
 		s_PCC_Deploy_AddModel_TypeInfo_ = (const char*)bin.Get();
 		s_PCC_Deploy_AddModel_TypeInfo_len_ = bin.Length()-1;
+	}
+
+	{
+		BYTE const chZipped[] =
+		{
+			0xBA,0x00,0x00,0x80,0x78,0x01,0x0B,0x70,0x76,0x8E,0xF7,0xCD,0x4F,0x49,0xCD,0x09,
+			0x28,0xCA,0x2F,0x08,0xCF,0x2C,0xC9,0xF0,0x4E,0xAD,0x54,0xF1,0xF4,0x0B,0x31,0x33,
+			0xD1,0x09,0x40,0x96,0x4A,0x2D,0x2A,0xA9,0xD4,0xB1,0xC6,0x10,0x52,0x01,0x89,0x84,
+			0x24,0xA6,0xEB,0x14,0x97,0x14,0x65,0xE6,0xA5,0xEB,0xF8,0x84,0xF8,0x06,0xBB,0xFA,
+			0x40,0x14,0x02,0x85,0x55,0xA0,0xC2,0x20,0x55,0x61,0xA9,0x45,0xC5,0x99,0xF9,0x79,
+			0x10,0x39,0x28,0x07,0x64,0x93,0xB1,0x91,0x0E,0x32,0x69,0x9D,0x9B,0x5A,0x92,0x91,
+			0x9F,0x52,0xE3,0x1F,0x1A,0x52,0x93,0x58,0x54,0x94,0x58,0x69,0x83,0x62,0x29,0xD4,
+			0x89,0x76,0x3A,0x0C,0x00,0x79,0x6D,0x3F,0xB5,
+		};
+		static CBinary idTxt;
+		CBinary& bin = idTxt;
+		VERIFY(QuickUnzip(chZipped, sizeof(chZipped), bin));
+		s_PCC_Deploy_ListModels_TypeInfo_ = (const char*)bin.Get();
+		s_PCC_Deploy_ListModels_TypeInfo_len_ = bin.Length()-1;
 	}
 
 	{
@@ -3218,6 +3240,7 @@ TCPSError PCC_Center_RC::Wrap_AddModel(
 	{
 		PCC_ModelFile& ref1 = modelFiles_wrap[idx1];
 			GET_STRING_EX_(thisObj, ptrInParams, ptrInParamsLen, ref1.name);
+			GET_BINARY_EX_(thisObj, ptrInParams, ptrInParamsLen, ref1.data);
 	}
 
 	if(0 != ptrInParamsLen)
@@ -5083,6 +5106,7 @@ TCPSError PCC_Center::Local_AddModel(
 		{
 			const PCC_ModelFile& ref2 = modelFiles_wrap[idx2];
 				Put_String_(&dataOutfiter, ref2.name.Get(), ref2.name.LenRef());
+				Put_Binary_(&dataOutfiter, ref2.data.Get(), ref2.data.LenRef());
 		}
 
 		ISCM_GAIN_TEMPORARY_CONTINUOUS_CALL_DATA(dataOutfiter.bufs_.Get(), dataOutfiter.bufs_.size(), iscm_data, iscm_dataLen);
@@ -5336,8 +5360,13 @@ public:
 
 public:
 	TCPSError AddModel(
-				IN const PCC_ModelProperty& moduleProperty,
+				IN const PCC_ModelProperty& modelProperty,
 				IN const tcps_Array<PCC_ModelFile>& modelFiles
+				) method;
+
+public:
+	TCPSError ListModels(
+				OUT tcps_Array<PCC_ModelPropWithKey>& modelsInfo
 				) method;
 
 public:
@@ -5840,6 +5869,7 @@ PCC_Deploy::MethodMatchingFlag::MethodMatchingFlag()
 	mmap_.insert(std::make_pair(CPtrStrA("RemoveModuleFiles", 17), Info(&matching_RemoveModuleFiles, false)));
 	mmap_.insert(std::make_pair(CPtrStrA("ListModules", 11), Info(&matching_ListModules, false)));
 	mmap_.insert(std::make_pair(CPtrStrA("AddModel", 8), Info(&matching_AddModel, false)));
+	mmap_.insert(std::make_pair(CPtrStrA("ListModels", 10), Info(&matching_ListModels, false)));
 	mmap_.insert(std::make_pair(CPtrStrA("DelModel", 8), Info(&matching_DelModel, false)));
 	mmap_.insert(std::make_pair(CPtrStrA("SetTimeout_", 11), Info(&matching_SetTimeout_, true)));
 	mmap_.insert(std::make_pair(CPtrStrA("SetSessionBufferSize_", 21), Info(&matching_SetSessionBufferSize_, true)));
@@ -5862,6 +5892,7 @@ void PCC_Deploy::MethodMatchingFlag::Reset()
 	matching_RemoveModuleFiles = false;
 	matching_ListModules = false;
 	matching_AddModel = false;
+	matching_ListModels = false;
 	matching_DelModel = false;
 	matching_SetTimeout_ = false;
 	matching_SetSessionBufferSize_ = false;
@@ -5872,12 +5903,12 @@ TCPSError PCC_Deploy_RC::UpdateMethodMatchingFlag_()
 	if(!m_methodMatchingUpdatedFlag.needUpdate)
 		return TCPS_OK;
 	InitializeAllCallsTypeInfo_();
-	tcps_String methods_ar[18];
+	tcps_String methods_ar[19];
 	IN tcps_Array<tcps_String> methods;
-	methods.Attach(xat_bind, methods_ar, 18);
-	tcps_String methodTypeInfos_ar[18];
+	methods.Attach(xat_bind, methods_ar, 19);
+	tcps_String methodTypeInfos_ar[19];
 	IN tcps_Array<tcps_String> methodTypeInfos;
-	methodTypeInfos.Attach(xat_bind, methodTypeInfos_ar, 18);
+	methodTypeInfos.Attach(xat_bind, methodTypeInfos_ar, 19);
 	methods_ar[0].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("Login"));
 	methodTypeInfos_ar[0].Attach(xat_bind, (char*)s_PCC_Deploy_Login_TypeInfo_, s_PCC_Deploy_Login_TypeInfo_len_);
 	methods_ar[1].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("Logout"));
@@ -5908,12 +5939,14 @@ TCPSError PCC_Deploy_RC::UpdateMethodMatchingFlag_()
 	methodTypeInfos_ar[13].Attach(xat_bind, (char*)s_PCC_Deploy_ListModules_TypeInfo_, s_PCC_Deploy_ListModules_TypeInfo_len_);
 	methods_ar[14].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("AddModel"));
 	methodTypeInfos_ar[14].Attach(xat_bind, (char*)s_PCC_Deploy_AddModel_TypeInfo_, s_PCC_Deploy_AddModel_TypeInfo_len_);
-	methods_ar[15].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("DelModel"));
-	methodTypeInfos_ar[15].Attach(xat_bind, (char*)s_PCC_Deploy_DelModel_TypeInfo_, s_PCC_Deploy_DelModel_TypeInfo_len_);
-	methods_ar[16].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("SetTimeout_"));
-	methodTypeInfos_ar[16].Attach(xat_bind, (char*)s_PCC_Deploy_SetTimeout__TypeInfo_, s_PCC_Deploy_SetTimeout__TypeInfo_len_);
-	methods_ar[17].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("SetSessionBufferSize_"));
-	methodTypeInfos_ar[17].Attach(xat_bind, (char*)s_PCC_Deploy_SetSessionBufferSize__TypeInfo_, s_PCC_Deploy_SetSessionBufferSize__TypeInfo_len_);
+	methods_ar[15].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("ListModels"));
+	methodTypeInfos_ar[15].Attach(xat_bind, (char*)s_PCC_Deploy_ListModels_TypeInfo_, s_PCC_Deploy_ListModels_TypeInfo_len_);
+	methods_ar[16].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("DelModel"));
+	methodTypeInfos_ar[16].Attach(xat_bind, (char*)s_PCC_Deploy_DelModel_TypeInfo_, s_PCC_Deploy_DelModel_TypeInfo_len_);
+	methods_ar[17].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("SetTimeout_"));
+	methodTypeInfos_ar[17].Attach(xat_bind, (char*)s_PCC_Deploy_SetTimeout__TypeInfo_, s_PCC_Deploy_SetTimeout__TypeInfo_len_);
+	methods_ar[18].Attach(xat_bind, (char*)CONST_STR_TO_PTR_LEN("SetSessionBufferSize_"));
+	methodTypeInfos_ar[18].Attach(xat_bind, (char*)s_PCC_Deploy_SetSessionBufferSize__TypeInfo_, s_PCC_Deploy_SetSessionBufferSize__TypeInfo_len_);
 	OUT tcps_Array<BOOL> matchingFlags;
 	TCPSError err = this->MethodCheck_(methods, methodTypeInfos, matchingFlags);
 	if(TCPS_OK == err)
@@ -5937,9 +5970,10 @@ TCPSError PCC_Deploy_RC::UpdateMethodMatchingFlag_()
 			m_methodMatchingFlag.matching_RemoveModuleFiles = matchingFlags_p[12];
 			m_methodMatchingFlag.matching_ListModules = matchingFlags_p[13];
 			m_methodMatchingFlag.matching_AddModel = matchingFlags_p[14];
-			m_methodMatchingFlag.matching_DelModel = matchingFlags_p[15];
-			m_methodMatchingFlag.matching_SetTimeout_ = matchingFlags_p[16];
-			m_methodMatchingFlag.matching_SetSessionBufferSize_ = matchingFlags_p[17];
+			m_methodMatchingFlag.matching_ListModels = matchingFlags_p[15];
+			m_methodMatchingFlag.matching_DelModel = matchingFlags_p[16];
+			m_methodMatchingFlag.matching_SetTimeout_ = matchingFlags_p[17];
+			m_methodMatchingFlag.matching_SetSessionBufferSize_ = matchingFlags_p[18];
 		}
 		else
 		{
@@ -8367,7 +8401,7 @@ TCPSError PCC_Deploy_RC::ListModules(
 }
 
 TCPSError PCC_Deploy_RC::AddModel(
-				IN const PCC_ModelProperty& moduleProperty_wrap,
+				IN const PCC_ModelProperty& modelProperty_wrap,
 				IN const tcps_Array<PCC_ModelFile>& modelFiles_wrap
 				) method
 {
@@ -8408,11 +8442,11 @@ TCPSError PCC_Deploy_RC::AddModel(
 
 	// 填充IN参数到outfiter
 
-	// IN PCC_ModelProperty moduleProperty
-			Put_String_(&m_dataOutfiter, moduleProperty_wrap.modelTag.name.Get(), moduleProperty_wrap.modelTag.name.LenRef());
-			Put_BaseType_(&m_dataOutfiter, moduleProperty_wrap.modelTag.version);
-		Put_String_(&m_dataOutfiter, moduleProperty_wrap.description.Get(), moduleProperty_wrap.description.LenRef());
-		Put_BaseType_(&m_dataOutfiter, moduleProperty_wrap.addTime);
+	// IN PCC_ModelProperty modelProperty
+			Put_String_(&m_dataOutfiter, modelProperty_wrap.modelTag.name.Get(), modelProperty_wrap.modelTag.name.LenRef());
+			Put_BaseType_(&m_dataOutfiter, modelProperty_wrap.modelTag.version);
+		Put_String_(&m_dataOutfiter, modelProperty_wrap.description.Get(), modelProperty_wrap.description.LenRef());
+		Put_BaseType_(&m_dataOutfiter, modelProperty_wrap.addTime);
 
 	// IN tcps_Array<PCC_ModelFile> modelFiles
 	Put_BaseType_(&m_dataOutfiter, modelFiles_wrap.LenRef());
@@ -8420,6 +8454,7 @@ TCPSError PCC_Deploy_RC::AddModel(
 	{
 		const PCC_ModelFile& ref1 = modelFiles_wrap[idx1];
 			Put_String_(&m_dataOutfiter, ref1.name.Get(), ref1.name.LenRef());
+			Put_Binary_(&m_dataOutfiter, ref1.data.Get(), ref1.data.LenRef());
 	}
 
 	// 调用RPCCall()
@@ -8453,6 +8488,98 @@ TCPSError PCC_Deploy_RC::AddModel(
 		if(iscm_replied_picker != iscm_replied_end)
 		{
 			// NPLogError(("PCC_Deploy::AddModel() method, Malformed replied"));
+			this->OnNetworkMalformed_();
+			return TCPS_ERR_MALFORMED_REPLY;
+		}
+	}
+	return TCPS_OK;
+}
+
+TCPSError PCC_Deploy_RC::ListModels(
+				OUT tcps_Array<PCC_ModelPropWithKey>& modelsInfo_wrap
+				) method
+{
+	iscm_ClientCallType iscm_cct_ = iscm_cct_invalid;
+	if(m_callingOutTIDs.HasFlag(OSThreadSelf(), &iscm_cct_))
+	{
+		if(iscm_cct_OnClose == iscm_cct_)
+			return TCPS_ERR_EXITING;
+		if(iscm_cct_callback==iscm_cct_ || iscm_cct_posting_callback==iscm_cct_)
+		{
+			NPR_ASSERT_EX(false, _T("在回调函数里调用会话自身的同步方法，可能导致死锁！"));
+			return TCPS_OK;
+		}
+	}
+
+	iscm_IRequester::AutoBeginCallEx locker(m_rpcRequester);
+	ASSERT(0 == m_dataOutfiter.bufs_.size());
+
+	TCPSError errUpdate = UpdateMethodMatchingFlag_();
+	if(TCPS_OK != errUpdate)
+		return errUpdate;
+	if(!m_methodMatchingFlag.matching_ListModels)
+		return TCPS_ERR_METHOD_NOT_MATCH;
+
+	DataOutfiter::AutoClear outfiter_AutoClear(m_dataOutfiter);
+
+	// 填充基本类型数据到outfiter
+	iscm_PeerCallFlags peerCallFlags;
+	peerCallFlags.sizeofBOOL_req = (INT8)sizeof(BOOL);
+	peerCallFlags.sizeofEnum_req = (INT8)sizeof(DummyEnumType);
+	peerCallFlags.requireReply = 1;
+	peerCallFlags.dummy_15 = 0;
+	m_dataOutfiter.Push(&peerCallFlags, sizeof(peerCallFlags));
+
+	INT32 call_id_len = 22;
+	m_dataOutfiter.Push(&call_id_len, sizeof(INT32));
+	m_dataOutfiter.Push("PCC_Deploy::ListModels", call_id_len+1);
+
+	// 填充IN参数到outfiter
+
+	// 调用RPCCall()
+	{
+		const SockWriteBuf* reqBufVec = m_dataOutfiter.bufs_.Get();
+		int reqBufVecCount = (int)m_dataOutfiter.bufs_.size();
+		int replyBytes = 0;
+		TCPSError err = m_rpcRequester->CallEx(RPCCT_RPC, reqBufVec, reqBufVecCount, replyBytes);
+		if(TCPS_OK != err)
+			return err;
+
+		tcps_Binary replied_data;
+		if(!replied_data.Resize(replyBytes))
+		{
+			this->OnNetworkMalformed_();
+			return TCPS_ERR_OUT_OF_MEMORY;
+		}
+		err = m_rpcRequester->RecvD(replied_data.Get(), replyBytes);
+		if(TCPS_OK != err)
+		{
+			// 无须调用this->OnNetworkMalformed_(), m_rpcRequester->RecvD()已做处理
+			return err;
+		}
+		const BYTE* iscm_replied_picker = replied_data.Get();
+		const BYTE* const iscm_replied_end = iscm_replied_picker + replyBytes;
+
+		iscm_RPCReplyPrefix replyPrefix;
+		PICK_BASETYPE_Q(iscm_replied_picker, replyPrefix);
+		INT32 array_len;
+		(void)array_len; // avoid warning.
+
+		// OUT tcps_Array<PCC_ModelPropWithKey> modelsInfo
+		PICK_BASETYPE_Q(iscm_replied_picker, array_len);
+		modelsInfo_wrap.Resize(array_len);
+		for(int idx2=0; idx2<modelsInfo_wrap.Length(); ++idx2)
+		{
+			PCC_ModelPropWithKey& ref2 = modelsInfo_wrap[idx2];
+				PICK_BASETYPE_Q(iscm_replied_picker, ref2.key);
+						PICK_STRING_Q(iscm_replied_picker, ref2.prop.modelTag.name);
+						PICK_BASETYPE_Q(iscm_replied_picker, ref2.prop.modelTag.version);
+					PICK_STRING_Q(iscm_replied_picker, ref2.prop.description);
+					PICK_BASETYPE_Q(iscm_replied_picker, ref2.prop.addTime);
+		}
+		if(iscm_replied_picker != iscm_replied_end)
+		{
+			// NPLogError(("PCC_Deploy::ListModels() method, Malformed replied"));
 			this->OnNetworkMalformed_();
 			return TCPS_ERR_MALFORMED_REPLY;
 		}
@@ -9438,6 +9565,7 @@ const PCC_Deploy::MethodMatchingFlag& PCC_Deploy::GetMethodMatchingFlag(
 			m_callSiteL->matchingFlags.matching_RemoveModuleFiles = (NULL != m_faceL->FindMethod_("RemoveModuleFiles", 17, s_PCC_Deploy_RemoveModuleFiles_TypeInfo_, s_PCC_Deploy_RemoveModuleFiles_TypeInfo_len_));
 			m_callSiteL->matchingFlags.matching_ListModules = (NULL != m_faceL->FindMethod_("ListModules", 11, s_PCC_Deploy_ListModules_TypeInfo_, s_PCC_Deploy_ListModules_TypeInfo_len_));
 			m_callSiteL->matchingFlags.matching_AddModel = (NULL != m_faceL->FindMethod_("AddModel", 8, s_PCC_Deploy_AddModel_TypeInfo_, s_PCC_Deploy_AddModel_TypeInfo_len_));
+			m_callSiteL->matchingFlags.matching_ListModels = (NULL != m_faceL->FindMethod_("ListModels", 10, s_PCC_Deploy_ListModels_TypeInfo_, s_PCC_Deploy_ListModels_TypeInfo_len_));
 			m_callSiteL->matchingFlags.matching_DelModel = (NULL != m_faceL->FindMethod_("DelModel", 8, s_PCC_Deploy_DelModel_TypeInfo_, s_PCC_Deploy_DelModel_TypeInfo_len_));
 			m_callSiteL->needUpdateFlags = false;
 		}
@@ -9460,7 +9588,7 @@ TCPSError PCC_Deploy::GetStreamedMethodTypeInfo_(
 				) const
 {
 	InitializeAllCallsTypeInfo_();
-	typedef CQuickStringMap<CPtrStrA, CPtrStrA, QSS_Traits<16> > MethodMap_;
+	typedef CQuickStringMap<CPtrStrA, CPtrStrA, QSS_Traits<17> > MethodMap_;
 	static MethodMap_* s_mMap = NULL;
 	if(NULL == s_mMap)
 	{
@@ -9484,6 +9612,7 @@ TCPSError PCC_Deploy::GetStreamedMethodTypeInfo_(
 			VERIFY(mMap.insert(std::make_pair(CONST_STR_TO_PTRSTR_A("RemoveModuleFiles"), CPtrStrA(s_PCC_Deploy_RemoveModuleFiles_TypeInfo_, s_PCC_Deploy_RemoveModuleFiles_TypeInfo_len_))).second);
 			VERIFY(mMap.insert(std::make_pair(CONST_STR_TO_PTRSTR_A("ListModules"), CPtrStrA(s_PCC_Deploy_ListModules_TypeInfo_, s_PCC_Deploy_ListModules_TypeInfo_len_))).second);
 			VERIFY(mMap.insert(std::make_pair(CONST_STR_TO_PTRSTR_A("AddModel"), CPtrStrA(s_PCC_Deploy_AddModel_TypeInfo_, s_PCC_Deploy_AddModel_TypeInfo_len_))).second);
+			VERIFY(mMap.insert(std::make_pair(CONST_STR_TO_PTRSTR_A("ListModels"), CPtrStrA(s_PCC_Deploy_ListModels_TypeInfo_, s_PCC_Deploy_ListModels_TypeInfo_len_))).second);
 			VERIFY(mMap.insert(std::make_pair(CONST_STR_TO_PTRSTR_A("DelModel"), CPtrStrA(s_PCC_Deploy_DelModel_TypeInfo_, s_PCC_Deploy_DelModel_TypeInfo_len_))).second);
 			s_mMap = &mMap;
 		}
@@ -10779,7 +10908,7 @@ TCPSError PCC_Deploy::ListModules(
 }
 
 TCPSError PCC_Deploy::AddModel(
-				IN const PCC_ModelProperty& moduleProperty_wrap,
+				IN const PCC_ModelProperty& modelProperty_wrap,
 				IN const tcps_Array<PCC_ModelFile>& modelFiles_wrap
 				) method
 {
@@ -10787,7 +10916,7 @@ TCPSError PCC_Deploy::AddModel(
 	if(m_faceR)
 	{
 		return m_faceR->AddModel(
-					moduleProperty_wrap,
+					modelProperty_wrap,
 					modelFiles_wrap
 					);
 	}
@@ -10798,7 +10927,7 @@ TCPSError PCC_Deploy::AddModel(
 			// 计算输入参数长度
 			INT_PTR inParamsLen = 0;
 			(void)inParamsLen;
-			inParamsLen += iscm_GetStreamedSize(moduleProperty_wrap);
+			inParamsLen += iscm_GetStreamedSize(modelProperty_wrap);
 			inParamsLen += iscm_GetStreamedSize(modelFiles_wrap);
 
 			// 拷贝输入参数到inParamsBuf
@@ -10807,7 +10936,7 @@ TCPSError PCC_Deploy::AddModel(
 				return TCPS_ERR_OUT_OF_MEMORY;
 			BYTE* pInParamsBuf = inParamsBuf.Get();
 			(void)pInParamsBuf;
-			iscm_StreamedStore(pInParamsBuf, moduleProperty_wrap);
+			iscm_StreamedStore(pInParamsBuf, modelProperty_wrap);
 			iscm_StreamedStore(pInParamsBuf, modelFiles_wrap);
 			ASSERT(pInParamsBuf-inParamsBuf.Get() == inParamsLen);
 
@@ -10853,8 +10982,85 @@ TCPSError PCC_Deploy::AddModel(
 		}
 		return ((IPCC_Deploy_LocalMethod::FN_AddModel)methodFuncL)(
 					m_faceL,
-					moduleProperty_wrap,
+					modelProperty_wrap,
 					modelFiles_wrap
+					);
+	}
+	else
+		return TCPS_ERR_NEED_SERVE_IPP;
+}
+
+TCPSError PCC_Deploy::ListModels(
+				OUT tcps_Array<PCC_ModelPropWithKey>& modelsInfo_wrap
+				) method
+{
+	ASSERT(NULL==m_faceR || NULL==m_faceL);
+	if(m_faceR)
+	{
+		return m_faceR->ListModels(
+					modelsInfo_wrap
+					);
+	}
+	else if(m_faceL)
+	{
+		if(m_streamedCallSite.func)
+		{
+			// 计算输入参数长度
+			INT_PTR inParamsLen = 0;
+			(void)inParamsLen;
+
+			// 拷贝输入参数到inParamsBuf
+			tcps_Binary inParamsBuf;
+			if(!inParamsBuf.Resize(inParamsLen))
+				return TCPS_ERR_OUT_OF_MEMORY;
+			BYTE* pInParamsBuf = inParamsBuf.Get();
+			(void)pInParamsBuf;
+			ASSERT(pInParamsBuf-inParamsBuf.Get() == inParamsLen);
+
+			// 调用外部流式方法处理函数
+			void* replyData = NULL;
+			INT_PTR replyLen = 0;
+			TCPSError err = m_streamedCallSite.func(
+						m_streamedCallSite.serverObj,
+						m_streamedCallSite.sessionObj,
+						"PCC_Deploy",
+						"ListModels",
+						inParamsBuf.Get(),
+						inParamsLen,
+						&replyData,
+						&replyLen
+						);
+			tcps_Binary autoFreeReplyData;
+			if(replyData)
+				autoFreeReplyData.Attach(xat_hold, replyData, replyLen);
+			if(TCPS_OK != err)
+				return err;
+
+			// 解析返回参数
+			const BYTE* pReplyData = (const BYTE*)replyData;
+			(void)pReplyData;
+			iscm_StreamedLoad(modelsInfo_wrap, pReplyData);
+			ASSERT(pReplyData-(const BYTE*)replyData == replyLen);
+			return TCPS_OK;
+		}
+
+		if(NULL == m_callSiteL)
+		{
+			CNPAutoLock locker(m_lock);
+			if(NULL == m_callSiteL)
+				m_callSiteL = tcps_New(CallSiteL_);
+		}
+		PROC& methodFuncL = m_callSiteL->fnListModels;
+		if(NULL == methodFuncL)
+		{
+			InitializeAllCallsTypeInfo_();
+			methodFuncL = m_faceL->FindMethod_("ListModels", 10, s_PCC_Deploy_ListModels_TypeInfo_, s_PCC_Deploy_ListModels_TypeInfo_len_);
+			if(NULL == methodFuncL)
+				return TCPS_ERR_METHOD_NOT_MATCH;
+		}
+		return ((IPCC_Deploy_LocalMethod::FN_ListModels)methodFuncL)(
+					m_faceL,
+					modelsInfo_wrap
 					);
 	}
 	else

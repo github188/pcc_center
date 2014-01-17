@@ -306,6 +306,7 @@ struct PCC_DynamicContext
 struct PCC_ModelFile
 {
 	tcps_String name;
+	tcps_Binary data;
 
 	int Compare(const PCC_ModelFile& r) const;
 	ISCM_STRUCT_COMPARE_OPERATORS(PCC_ModelFile)
@@ -653,6 +654,9 @@ typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
 		cmp = SimpleTypeCompare_(this->name, r.name);
 		if(0 != cmp)
 			return cmp;
+		cmp = SimpleTypeCompare_(this->data, r.data);
+		if(0 != cmp)
+			return cmp;
 		return 0;
 	}
 #endif	// #ifndef PCC_ModelFile_Compare_defined
@@ -916,15 +920,18 @@ typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
 	{
 		int size = 0;
 		size += iscm_GetStreamedSize(val.name);
+		size += iscm_GetStreamedSize(val.data);
 		return size;
 	}
 	inline void iscm_StreamedLoad(PCC_ModelFile& val, const BYTE*& data)
 	{
 		iscm_StreamedLoad(val.name, data);
+		iscm_StreamedLoad(val.data, data);
 	}
 	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModelFile& val)
 	{
 		iscm_StreamedStore(buf, val.name);
+		iscm_StreamedStore(buf, val.data);
 	}
 #endif	// #ifndef PCC_ModelFile_STREAMED_FUNCTIONS_defined
 

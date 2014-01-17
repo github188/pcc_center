@@ -260,7 +260,8 @@ protected:
 				) callback
 	{
 		// TODO: 请实现此函数
-		return TCPS_ERR_NOT_IMPLEMENTED;
+		//return TCPS_ERR_NOT_IMPLEMENTED;
+		return TCPS_OK;
 	}
 
 	virtual TCPSError DelModel(

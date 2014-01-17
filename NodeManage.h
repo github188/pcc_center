@@ -3,6 +3,26 @@
 #include "pcc_centersession.h"
 #include "nplog.h"
 //#include "tcps_err.h"
+class CFun
+{
+public:
+	enum FUNTYPE
+	{
+		unknown = 0,
+		query =1,
+		deploy
+	};
+public:
+	CFun();
+	~CFun();
+	void setParam(void* param);
+	void setFunction(FUNTYPE ft);
+	int operator()(PCC_Center_S* ptr);
+private:
+	bool m_done;
+	FUNTYPE m_ft;
+	void* m_param;
+};
 class CNodeManage//:public boost::enable_shared_from_this<CModuleManage>
 {
 public:
@@ -99,6 +119,9 @@ public:
 				);
 	TCPSError ListNodes(tcps_Array<PCC_NodeDesc>& nodes);
 	TCPSError GetNodeDynamicContext(const tcps_String& nodeName, PCC_DynamicContext& dynamicContext); 
+	TCPSError DoThingsOnNodes(CFun& cf);
+	TCPSError DeployNodes( const PCC_ModelProperty& modelProperty,
+				 const tcps_Array<PCC_ModelFile>& modelClientFiles);
 //	void init();
 //	BOOL RegisterModules (const char *moduleDir);
 //	BOOL CopyModules (const char *moduleDir,tcps_Array<PCC_ModuleFile> &moudleFiles);

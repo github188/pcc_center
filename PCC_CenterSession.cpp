@@ -8,6 +8,7 @@
 #include "nplog.h"
 #include "nodemanage.h"
 #include "singleton.h"
+#include "modelmanage.h"
 /////////////////////////////////////////////////////////////////////
 // interface PCC_Center
 
@@ -261,12 +262,20 @@ TCPSError PCC_Deploy_S::ListModules(
 }
 
 TCPSError PCC_Deploy_S::AddModel(
-				IN const PCC_ModelProperty& moduleProperty,
+				IN const PCC_ModelProperty& modelProperty,
 				IN const tcps_Array<PCC_ModelFile>& modelFiles
 				) method
 {
 	// TODO: 请实现此函数
-	return TCPS_ERR_NOT_IMPLEMENTED;
+	return pgrid_util::Singleton<CModelManage>::instance().AddModel(modelProperty,modelFiles);
+}
+
+TCPSError PCC_Deploy_S::ListModels(
+				OUT tcps_Array<PCC_ModelPropWithKey>& modelsInfo
+				) method
+{
+	// TODO: 请实现此函数
+	return pgrid_util::Singleton<CModelManage>::instance().ListModels(modelsInfo);
 }
 
 TCPSError PCC_Deploy_S::DelModel(
@@ -274,7 +283,7 @@ TCPSError PCC_Deploy_S::DelModel(
 				) method
 {
 	// TODO: 请实现此函数
-	return TCPS_ERR_NOT_IMPLEMENTED;
+	return pgrid_util::Singleton<CModelManage>::instance().DelModel( modelKey ); 
 }
 
 /////////////////////////////////////////////////////////////////////
