@@ -41,7 +41,7 @@ private:
 		CNPAutoLock lock(m_lock_port);
 		return ++port;
 	}
-	TCPSError StartServer(const PCC_Tag& tag,const char *path);
+	TCPSError StartXNode(const PCC_Tag& tag,const char *path);
 
 private:
 	static const std::string m_ModelsSql;
@@ -50,8 +50,8 @@ private:
 	CLocker m_lock_db;
 	CLocker m_lock_port;
 
-	std::map<PCC_Tag,nwProcessInfo> m_server_processes;
-	CLocker m_lock_server;
+	std::map<PCC_Tag,nwProcessInfo> m_xnode_processes;
+	CLocker m_lock_xnode;
 
 
 };

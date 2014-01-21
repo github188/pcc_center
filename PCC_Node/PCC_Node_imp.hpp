@@ -5,6 +5,15 @@
 #include "CpuMem.h"
 #include "Register.h"
 #include "ipcvt.h"
+#include <sstream>
+#include "np_gridutils.h"
+#include "npfdk.h"
+#include "FileSearch.h"
+#include "nplog.h"
+#include "filestorage.h"
+#include "Singleton.h"
+#include "n_modelmanage.h"
+
 class PCC_Node : public PCC_Center
 {
 private:
@@ -13,7 +22,17 @@ private:
 
 public:
 	PCC_Node()
-		{}
+	{
+		char buf[512];
+		GetModuleFileName(NULL,buf,512);
+		_tcsrchr(buf,'\\')[1] = 0;
+		strcat(buf,"Models\\");
+		if(!CreatePath(buf))//已存在，则也返回TRUE
+		{
+			NPLogError(("创建目录失败！:%s\n",buf));
+			exit(-1);
+		}
+	}
 	virtual ~PCC_Node()
 		{	DestroyRequester();	}
 
@@ -255,13 +274,11 @@ protected:
     }
 
 	virtual TCPSError AddModel(
-				IN const PCC_ModelProperty& moduleProperty,
+				IN const PCC_ModelProperty& modelProperty,
 				IN const tcps_Array<PCC_ModelFile>& modelFiles
 				) callback
 	{
-		// TODO: 请实现此函数
-		//return TCPS_ERR_NOT_IMPLEMENTED;
-		return TCPS_OK;
+		return pgrid_util::Singleton<CModelManage>::instance().AddModel(modelProperty,modelFiles);
 	}
 
 	virtual TCPSError DelModel(
