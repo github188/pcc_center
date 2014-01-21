@@ -298,10 +298,10 @@ protected:
 
 protected:
 	virtual TCPSError DelModel(
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback
 	{	// TODO: 请在派生类中重载此函数
-		(void)modelKey;
+		(void)tag;
 		return TCPS_ERR_CALLBACK_NOT_IMPLEMENTED;
 	}
 
@@ -445,7 +445,7 @@ private:
 
 	static TCPSError Local_DelModel(
 				IN void* sessionObj_wrap,
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback;
 };
 #endif // #ifndef PCC_Center_defined

@@ -408,7 +408,7 @@ struct IPCC_Center_LocalCallback : public iscm_ILocalCallbackBase, public PCC_Ce
 
 	typedef TCPSError (*FN_DelModel)(
 				IN void* sessionObj_wrap,
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback;
 };
 

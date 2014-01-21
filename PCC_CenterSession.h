@@ -237,7 +237,7 @@ public:
 
 public:
 	TCPSError DelModel(
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback;
 
 public:

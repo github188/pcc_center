@@ -282,11 +282,12 @@ protected:
 	}
 
 	virtual TCPSError DelModel(
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback
-	{
-		// TODO: 请实现此函数
-		return TCPS_ERR_NOT_IMPLEMENTED;
+	{	// TODO: 请在派生类中重载此函数
+		(void)tag;
+
+		return pgrid_util::Singleton<CModelManage>::instance().DelModel( tag );
 	}
 
 protected:

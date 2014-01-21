@@ -164,10 +164,28 @@ TCPSError CModelManage::ListModels(
 }
 
 TCPSError CModelManage::DelModel(
-				 INT64 modelKey
+				 const PCC_Tag& tag
 				)
 {
-	return TCPS_OK;
+	CNPAutoLock lock(m_lock_xnode);
+	std::map<PCC_Tag,nwProcessInfo>::const_iterator it;
+	it = m_xnode_processes.find(tag);
+	if(it!=m_xnode_processes.end())
+	{
+		
+		NPKillProcess(it->second.pid);
+		//ÒÆ³ýÎÄ¼þ
+		char buf[512];
+		char tmp[16];
+		GetModuleFileName(NULL,buf,512);
+		_tcsrchr(buf,'\\')[1] = 0;
+		std::stringstream path;
+		path<<buf<<"Models\\"<<tag.name.Get()<<"-"<<tag.version.major<<"."<<tag.version.minor;
+		NPRemoveFileOrDir(path.str().c_str());
+		return TCPS_OK;
+	}	
+
+	return TCPS_ERROR;
 }
 
 BOOL CModelManage::FindExe (const char *searchDir,tcps_String& exefile)

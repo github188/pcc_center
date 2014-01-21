@@ -76,7 +76,7 @@ protected:
 	}
 
 	virtual TCPSError DelModel(
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback
 	{
 		// TODO: 请实现此函数

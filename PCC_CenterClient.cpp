@@ -272,8 +272,11 @@ static INT_PTR InitializeAllCallsTypeInfo_()
 	{
 		BYTE const chZipped[] =
 		{
-			0x13,0x00,0x00,0x80,0x78,0x01,0x4B,0x4E,0xCC,0xC9,0x49,0x4A,0x4C,0xCE,0xAE,0xF1,
-			0xF4,0x03,0xA2,0x10,0x33,0x13,0x1D,0x06,0x00,0x47,0x50,0x06,0x3E,
+			0x50,0x00,0x00,0x80,0x78,0x01,0x0B,0x70,0x76,0x8E,0x0F,0x49,0x4C,0x57,0x29,0x2E,
+			0x29,0xCA,0xCC,0x4B,0xD7,0x09,0x00,0x72,0xC3,0x52,0x8B,0x8A,0x33,0xF3,0xF3,0x74,
+			0xAC,0x91,0x38,0x2A,0x9E,0x7E,0x21,0xC6,0x46,0x3A,0xC8,0xA4,0x75,0x72,0x62,0x4E,
+			0x4E,0x52,0x62,0x72,0x76,0x8D,0xA7,0x5F,0x0D,0x48,0x29,0xD0,0x18,0x1D,0x06,0x00,
+			0x34,0xB0,0x19,0xE2,
 		};
 		static CBinary idTxt;
 		CBinary& bin = idTxt;
@@ -1161,13 +1164,13 @@ protected:
 
 protected:
 	virtual TCPSError DelModel(
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback
 	{
 		if(m_owner)
 		{
 			return m_owner->DelModel(
-					modelKey
+					tag
 					);
 		}
 		// TODO: 请在派生类中重载此函数
@@ -3343,9 +3346,10 @@ TCPSError PCC_Center_RC::Wrap_DelModel(
 	(void)array_len; // avoid warning.
 	(void)peerCallFlags;
 
-	// IN INT64 modelKey
-	IN INT64 modelKey_wrap;
-	GET_BASETYPE_EX_(thisObj, ptrInParams, ptrInParamsLen, modelKey_wrap);
+	// IN PCC_Tag tag
+	IN PCC_Tag tag_wrap;
+		GET_STRING_EX_(thisObj, ptrInParams, ptrInParamsLen, tag_wrap.name);
+		GET_BASETYPE_EX_(thisObj, ptrInParams, ptrInParamsLen, tag_wrap.version);
 
 	if(0 != ptrInParamsLen)
 	{
@@ -3381,14 +3385,14 @@ TCPSError PCC_Center_RC::Wrap_DelModel(
 		{
 			iscm_ClientThreadIDs::AutoThisTID autoCallingFlag(thisObj->m_callingOutTIDs, iscm_cct_callback);
 			errTcps = thisObj->DelModel(
-				modelKey_wrap
+				tag_wrap
 				);
 		}
 		else
 		{
 			ASSERT(faceObj);
 			errTcps = faceObj->DelModel(
-				modelKey_wrap
+				tag_wrap
 				);
 		}
 	}
@@ -5133,7 +5137,7 @@ TCPSError PCC_Center::Local_AddModel(
 
 TCPSError PCC_Center::Local_DelModel(
 				IN void* sessionObj,
-				IN INT64 modelKey_wrap
+				IN const PCC_Tag& tag_wrap
 				) callback
 {
 	PCC_Center* const pCC_CenterObj_wrap = (PCC_Center*)sessionObj;
@@ -5147,8 +5151,9 @@ TCPSError PCC_Center::Local_DelModel(
 
 		DataOutfiter dataOutfiter;
 
-		// IN INT64 modelKey
-		Put_BaseType_(&dataOutfiter, modelKey_wrap);
+		// IN PCC_Tag tag
+			Put_String_(&dataOutfiter, tag_wrap.name.Get(), tag_wrap.name.LenRef());
+			Put_BaseType_(&dataOutfiter, tag_wrap.version);
 
 		ISCM_GAIN_TEMPORARY_CONTINUOUS_CALL_DATA(dataOutfiter.bufs_.Get(), dataOutfiter.bufs_.size(), iscm_data, iscm_dataLen);
 		iscm_replyData = NULL;
@@ -5167,7 +5172,7 @@ TCPSError PCC_Center::Local_DelModel(
 	}
 
 	return pCC_CenterObj_wrap->DelModel(
-					modelKey_wrap
+					tag_wrap
 					);
 }
 

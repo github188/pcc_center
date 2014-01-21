@@ -408,7 +408,7 @@ struct IPCC_Center_LocalCallback : public iscm_ILocalCallbackBase, public PCC_Ce
 
 	typedef TCPSError (*FN_DelModel)(
 				IN void* sessionObj_wrap,
-				IN INT64 modelKey
+				IN const PCC_Tag& tag
 				) callback;
 };
 
@@ -419,6 +419,253 @@ typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
 			IN IPCC_Center_LocalCallback* callbackHandler
 			);
 #endif	// #ifndef PCC_Center_T_defined
+
+// 'class PCC_Deploy_T'用于定义接口'PCC_Deploy'的局部类型
+#ifndef PCC_Deploy_T_defined
+#define PCC_Deploy_T_defined
+class PCC_Deploy_T
+{
+};
+
+struct IPCC_Deploy_LocalMethod : public iscm_ILocalMethodBase, public PCC_Deploy_T
+{
+	typedef TCPSError (*FN_OnStreamedCall_L_)(
+				IN void* sessionObj,
+				IN const char* methodName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+
+	typedef TCPSError (*FN_Login)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& ticket
+				) method;
+
+	typedef TCPSError (*FN_Logout)(
+				IN void* sessionObj_wrap
+				) method;
+
+	typedef TCPSError (*FN_CreateTrunk)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk
+				) method;
+
+	typedef TCPSError (*FN_RemoveTrunk)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk
+				) method;
+
+	typedef TCPSError (*FN_ListTrunk)(
+				IN void* sessionObj_wrap,
+				OUT tcps_Array<tcps_String>& trunks
+				) method;
+
+	typedef TCPSError (*FN_AddAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag,
+				IN const tcps_Array<PCC_ModuleFile>& files
+				) method;
+
+	typedef TCPSError (*FN_RemoveAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag
+				) method;
+
+	typedef TCPSError (*FN_ListAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				OUT tcps_Array<PCC_Tag>& authTags
+				) method;
+
+	typedef TCPSError (*FN_FindAuthCenter)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_Tag& authTag
+				) method;
+
+	typedef TCPSError (*FN_AddModule)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN const PCC_ModuleProperty& moduleProperty,
+				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
+				OUT INT64& moduleKey
+				) method;
+
+	typedef TCPSError (*FN_AddModuleFile)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey,
+				IN PCC_ModuleFileType fileType,
+				IN const tcps_Array<PCC_ModuleFile>& moduleFiles
+				) method;
+
+	typedef TCPSError (*FN_RemoveModule)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey
+				) method;
+
+	typedef TCPSError (*FN_RemoveModuleFiles)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				IN INT64 moduleKey,
+				IN INT32 fileType
+				) method;
+
+	typedef TCPSError (*FN_ListModules)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& trunk,
+				OUT tcps_Array<PCC_ModulePropWithKey>& modulesInfo
+				) method;
+
+	typedef TCPSError (*FN_AddModel)(
+				IN void* sessionObj_wrap,
+				IN const PCC_ModelProperty& modelProperty,
+				IN const tcps_Array<PCC_ModelFile>& modelFiles
+				) method;
+
+	typedef TCPSError (*FN_ListModels)(
+				IN void* sessionObj_wrap,
+				OUT tcps_Array<PCC_ModelPropWithKey>& modelsInfo
+				) method;
+
+	typedef TCPSError (*FN_DelModel)(
+				IN void* sessionObj_wrap,
+				IN INT64 modelKey
+				) method;
+};
+
+struct IPCC_Deploy_LocalCallback : public iscm_ILocalCallbackBase, public PCC_Deploy_T
+{
+	typedef TCPSError (*FN_OnStreamedCallback_L_)(
+				IN void* sessionObj,
+				IN const char* callbackName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+};
+
+typedef TCPSError (*FNMakeLocalSession_PCC_Deploy)(
+			IN const IPP& clientID_IPP,
+			IN PCC_CenterSessionMaker& sessionMaker,
+			OUT IPCC_Deploy_LocalMethod*& methodHandler,
+			IN IPCC_Deploy_LocalCallback* callbackHandler
+			);
+#endif	// #ifndef PCC_Deploy_T_defined
+
+// 'class PCC_User_T'用于定义接口'PCC_User'的局部类型
+#ifndef PCC_User_T_defined
+#define PCC_User_T_defined
+class PCC_User_T
+{
+public:
+	struct PCCProperty
+	{
+		tcps_String version;
+
+		int Compare(const PCCProperty& r) const;
+		ISCM_STRUCT_COMPARE_OPERATORS(PCCProperty)
+	};
+};
+
+struct IPCC_User_LocalMethod : public iscm_ILocalMethodBase, public PCC_User_T
+{
+	typedef TCPSError (*FN_OnStreamedCall_L_)(
+				IN void* sessionObj,
+				IN const char* methodName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+
+	typedef TCPSError (*FN_GetPccProperty)(
+				IN void* sessionObj_wrap,
+				OUT PCCProperty& pccProp
+				) method;
+
+	typedef TCPSError (*FN_ListNodes)(
+				IN void* sessionObj_wrap,
+				OUT tcps_Array<PCC_NodeDesc>& nodes
+				) method;
+
+	typedef TCPSError (*FN_GetNodeDynamicContext)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& nodeName,
+				OUT PCC_DynamicContext& dynamicContext
+				) method;
+
+	typedef TCPSError (*FN_ListModules)(
+				IN void* sessionObj_wrap,
+				IN const tcps_String& regex,
+				OUT tcps_Array<PCC_ModuleInfo>& modulesInfo
+				) method;
+
+	typedef TCPSError (*FN_Execute)(
+				IN void* sessionObj_wrap,
+				IN INT64 moduleKey,
+				IN const tcps_String& inputUrl,
+				IN const tcps_String& outputUrl,
+				IN const tcps_Binary& moduleParams,
+				OUT INT64& jobKey
+				) method;
+
+	typedef TCPSError (*FN_QueryJobs)(
+				IN void* sessionObj_wrap,
+				IN const tcps_Array<INT64>& jobsKey,
+				OUT tcps_Array<ExecuteState>& jobsState
+				) method;
+
+	typedef TCPSError (*FN_CancelJob)(
+				IN void* sessionObj_wrap,
+				IN INT64 jobKey
+				) posting_method;
+};
+
+struct IPCC_User_LocalCallback : public iscm_ILocalCallbackBase, public PCC_User_T
+{
+	typedef TCPSError (*FN_OnStreamedCallback_L_)(
+				IN void* sessionObj,
+				IN const char* callbackName,
+				IN INT_PTR nameLen /*= -1*/,
+				IN const void* data /*= NULL*/,
+				IN INT_PTR dataLen /*>= 0*/,
+				OUT LPVOID* replyData /*= NULL*/,
+				OUT INT_PTR* replyLen /*= NULL*/
+				);
+
+	typedef TCPSError (*FN_OnExecuted)(
+				IN void* sessionObj_wrap,
+				IN INT64 jobKey,
+				IN TCPSError errorCode,
+				IN const tcps_Binary& context
+				) posting_callback;
+
+	typedef TCPSError (*FN_OnExecuted1)(
+				IN void* sessionObj_wrap,
+				IN INT64 jobKey,
+				IN TCPSError errorCode,
+				IN const tcps_Binary& context,
+				IN const tcps_Array<tcps_Binary>& outArgs
+				) posting_callback;
+};
+
+typedef TCPSError (*FNMakeLocalSession_PCC_User)(
+			IN const IPP& clientID_IPP,
+			IN PCC_CenterSessionMaker& sessionMaker,
+			OUT IPCC_User_LocalMethod*& methodHandler,
+			IN IPCC_User_LocalCallback* callbackHandler
+			);
+#endif	// #ifndef PCC_User_T_defined
 
 
 /////////////////////////////////////////////////////////////////////
@@ -693,6 +940,18 @@ typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
 		return 0;
 	}
 #endif	// #ifndef PCC_ModelPropWithKey_Compare_defined
+
+#ifndef PCC_User_PCCProperty_Compare_defined
+	#define PCC_User_PCCProperty_Compare_defined
+	inline int PCC_User_T::PCCProperty::Compare(const PCCProperty& r) const
+	{
+		int cmp = 0;
+		cmp = SimpleTypeCompare_(this->version, r.version);
+		if(0 != cmp)
+			return cmp;
+		return 0;
+	}
+#endif	// #ifndef PCC_User_PCCProperty_Compare_defined
 
 
 /////////////////////////////////////////////////////////////////////
@@ -979,5 +1238,23 @@ typedef TCPSError (*FNMakeLocalSession_PCC_Center)(
 		iscm_StreamedStore(buf, val.prop);
 	}
 #endif	// #ifndef PCC_ModelPropWithKey_STREAMED_FUNCTIONS_defined
+
+#ifndef PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
+	#define PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
+	inline int iscm_GetStreamedSize(const PCC_User_T::PCCProperty& val)
+	{
+		int size = 0;
+		size += iscm_GetStreamedSize(val.version);
+		return size;
+	}
+	inline void iscm_StreamedLoad(PCC_User_T::PCCProperty& val, const BYTE*& data)
+	{
+		iscm_StreamedLoad(val.version, data);
+	}
+	inline void iscm_StreamedStore(BYTE*& buf, const PCC_User_T::PCCProperty& val)
+	{
+		iscm_StreamedStore(buf, val.version);
+	}
+#endif	// #ifndef PCC_User_PCCProperty_STREAMED_FUNCTIONS_defined
 
 #endif	// #ifndef _PCC_CenterTypesDefine_h_

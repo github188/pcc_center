@@ -30,7 +30,7 @@ TCPSError ListModels(
 				); 
 
 TCPSError DelModel(
-				 INT64 modelKey
+				 const PCC_Tag& tag
 				); 
 
 private:
