@@ -881,18 +881,21 @@ public:
 public:
 	TCPSError AddModule(
 				IN const char* trunk, IN INT32 trunk_len /*= -1*/,
+				IN INT64 modelKey,
 				IN const PCC_ModuleProperty& moduleProperty,
 				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
 				OUT INT64& moduleKey
 				) method;
 	TCPSError AddModule(
 				IN const char* trunk,
+				IN INT64 modelKey,
 				IN const PCC_ModuleProperty& moduleProperty,
 				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
 				OUT INT64& moduleKey
 				) method
 		{	return this->AddModule(
 							trunk, -1,
+							modelKey,
 							moduleProperty,
 							moudleFiles,
 							moduleKey
@@ -900,12 +903,14 @@ public:
 		}
 	TCPSError AddModule(
 				IN const tcps_String& trunk,
+				IN INT64 modelKey,
 				IN const PCC_ModuleProperty& moduleProperty,
 				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
 				OUT INT64& moduleKey
 				) method
 		{	return this->AddModule(
 							trunk.Get(), trunk.Length(),
+							modelKey,
 							moduleProperty,
 							moudleFiles,
 							moduleKey
@@ -913,12 +918,14 @@ public:
 		}
 	TCPSError AddModule(
 				IN const char* trunk, IN INT32 trunk_len /*= -1*/,
+				IN INT64 modelKey,
 				IN const PCC_ModuleProperty& moduleProperty,
 				IN const PCC_ModuleFile* moudleFiles, IN INT32 moudleFiles_count,
 				OUT INT64& moduleKey
 				) method
 		{	return this->AddModule(
 							trunk, trunk_len,
+							modelKey,
 							moduleProperty,
 							tcps_Array<PCC_ModuleFile>(xat_bind, (PCC_ModuleFile*)moudleFiles, moudleFiles_count),
 							moduleKey

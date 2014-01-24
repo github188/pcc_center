@@ -195,11 +195,13 @@ enum PCC_ModulePlatform
 struct PCC_ModulePropWithKey
 {
 	INT64 key;
+	INT64 model;
 	PCC_ModuleProperty prop;
 
 	PCC_ModulePropWithKey()
 	{
 		this->key = 0;
+		this->model = 0;
 	}
 
 	int Compare(const PCC_ModulePropWithKey& r) const;
@@ -491,6 +493,7 @@ struct IPCC_Deploy_LocalMethod : public iscm_ILocalMethodBase, public PCC_Deploy
 	typedef TCPSError (*FN_AddModule)(
 				IN void* sessionObj_wrap,
 				IN const tcps_String& trunk,
+				IN INT64 modelKey,
 				IN const PCC_ModuleProperty& moduleProperty,
 				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
 				OUT INT64& moduleKey
@@ -817,6 +820,9 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 		cmp = SimpleTypeCompare_(this->key, r.key);
 		if(0 != cmp)
 			return cmp;
+		cmp = SimpleTypeCompare_(this->model, r.model);
+		if(0 != cmp)
+			return cmp;
 		cmp = this->prop.Compare(r.prop);
 		if(0 != cmp)
 			return cmp;
@@ -1113,17 +1119,20 @@ typedef TCPSError (*FNMakeLocalSession_PCC_User)(
 	{
 		int size = 0;
 		size += (int)sizeof(val.key);
+		size += (int)sizeof(val.model);
 		size += iscm_GetStreamedSize(val.prop);
 		return size;
 	}
 	inline void iscm_StreamedLoad(PCC_ModulePropWithKey& val, const BYTE*& data)
 	{
 		iscm_StreamedLoad(val.key, data);
+		iscm_StreamedLoad(val.model, data);
 		iscm_StreamedLoad(val.prop, data);
 	}
 	inline void iscm_StreamedStore(BYTE*& buf, const PCC_ModulePropWithKey& val)
 	{
 		iscm_StreamedStore(buf, val.key);
+		iscm_StreamedStore(buf, val.model);
 		iscm_StreamedStore(buf, val.prop);
 	}
 #endif	// #ifndef PCC_ModulePropWithKey_STREAMED_FUNCTIONS_defined

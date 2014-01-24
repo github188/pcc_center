@@ -52,7 +52,7 @@ public:
 	int RemoveAuthCenter(const tcps_String& trunk,const PCC_Tag& authTag);
 	int ListAuthCenter(const tcps_String& trunk,tcps_Array<PCC_Tag>& authTags); 
 	int FindAuthCenter(const tcps_String& trunk,const PCC_Tag& authTag);
-	int AddModule(const tcps_String& trunk,const PCC_ModuleProperty& moduleProperty,const tcps_Array<PCC_ModuleFile>& moudleFiles,INT64& moduleKey);
+	int AddModule(const tcps_String& trunk,INT64 modelKey,const PCC_ModuleProperty& moduleProperty,const tcps_Array<PCC_ModuleFile>& moudleFiles,INT64& moduleKey);
 	int AddModuleFile(const tcps_String& trunk,INT64 moduleKey,PCC_ModuleFileType fileType,const tcps_Array<PCC_ModuleFile>& moduleFiles);
 	int RemoveModule(const tcps_String& trunk,INT64 moduleKey/*,MY_NP_GridUserClient &m_gridConn*/);
 	int RemoveModuleFiles(const tcps_String& trunk,INT64 moduleKey,INT32 fileType);
@@ -103,7 +103,7 @@ public:
 	TCPSError RemoveAuthCenter(const tcps_String& trunk,const PCC_Tag& authTag);
 	TCPSError ListAuthCenter(const tcps_String& trunk,tcps_Array<PCC_Tag>& authTags); 
 	TCPSError FindAuthCenter(const tcps_String& trunk,const PCC_Tag& authTag);
-	TCPSError AddModule(const tcps_String& trunk,const PCC_ModuleProperty& moduleProperty,const tcps_Array<PCC_ModuleFile>& moudleFiles,INT64& moduleKey);
+	TCPSError AddModule(const tcps_String& trunk,INT64 modelKey,const PCC_ModuleProperty& moduleProperty,const tcps_Array<PCC_ModuleFile>& moudleFiles,INT64& moduleKey);
 	TCPSError AddModuleFile(const tcps_String& trunk,INT64 moduleKey,PCC_ModuleFileType fileType,const tcps_Array<PCC_ModuleFile>& moduleFiles);
 	TCPSError RemoveModule(const tcps_String& trunk,INT64 moduleKey);
 	TCPSError RemoveModuleFiles(const tcps_String& trunk,INT64 moduleKey,INT32 fileType);

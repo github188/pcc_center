@@ -586,6 +586,7 @@ private:
 private:
 	TCPSError AddModule(
 				IN const tcps_String& trunk,
+				IN INT64 modelKey,
 				IN const PCC_ModuleProperty& moduleProperty,
 				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
 				OUT INT64& moduleKey

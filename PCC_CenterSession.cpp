@@ -213,13 +213,14 @@ TCPSError PCC_Deploy_S::FindAuthCenter(
 
 TCPSError PCC_Deploy_S::AddModule(
 				IN const tcps_String& trunk,
+				IN INT64 modelKey,
 				IN const PCC_ModuleProperty& moduleProperty,
 				IN const tcps_Array<PCC_ModuleFile>& moudleFiles,
 				OUT INT64& moduleKey
 				) method
 {
 	// TODO: 请实现此函数
-	return m_deploy.AddModule(trunk,moduleProperty,moudleFiles,moduleKey);
+	return m_deploy.AddModule(trunk,modelKey,moduleProperty,moudleFiles,moduleKey);
 }
 
 TCPSError PCC_Deploy_S::AddModuleFile(
@@ -294,7 +295,6 @@ PCC_User_S::PCC_User_S(PCC_CenterSessionMaker& sessionMaker, PCC_CenterSession* 
 {
 	NPR_ASSERT((NULL==sessionR) != (NULL==sessionL)); // 有且只能为一种模式
 	// TODO: 请添加PCC_User的构造处理
-
 }
 
 PCC_User_S::~PCC_User_S()

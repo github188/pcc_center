@@ -575,11 +575,11 @@ int CTrunkManage::FindAuthCenter(const tcps_String& trunk,const PCC_Tag& authTag
 	return 0;
 }
 //只负责pcc模块的添加
-int CTrunkManage::AddModule(const tcps_String& trunk,const PCC_ModuleProperty& moduleProperty
+int CTrunkManage::AddModule(const tcps_String& trunk,INT64 modelKey,const PCC_ModuleProperty& moduleProperty
 			  ,const tcps_Array<PCC_ModuleFile>& moudleFiles,INT64& moduleKey)
 {
 	//ASSERT(moduleProperty.moduleType);
-	int ty =moduleProperty.moduleType;
+	int ty =(int)modelKey;//moduleProperty.moduleType;
 
 	CNPAutoLock lok(m_lock_db);//这段代码可以分段加锁来优化，暂时简化处理
 	//先判断trunk是否存在
@@ -604,7 +604,7 @@ int CTrunkManage::AddModule(const tcps_String& trunk,const PCC_ModuleProperty& m
 	//
 	std::stringstream mod_name ;
 	mod_name<<moduleProperty.moduleTag.name.Get()<<"_"<<moduleProperty.moduleTag.version.major<<"_"<<moduleProperty.moduleTag.version.minor;
-	if(moduleProperty.moduleType != PCC_MODULE_VIDSTRUCTURE)//网格的算法库
+	//if(moduleProperty.moduleType != PCC_MODULE_VIDSTRUCTURE)//网格的算法库
 	{
 		
 		//_s 创建目录，保存模块文件
@@ -1033,9 +1033,9 @@ TCPSError CNPDeploy::FindAuthCenter(const tcps_String& trunk,const PCC_Tag& auth
 {
 	return (TCPSError)pgrid_util::Singleton<CTrunkManage>::instance().FindAuthCenter(trunk,authTag);
 }
-TCPSError CNPDeploy::AddModule(const tcps_String& trunk,const PCC_ModuleProperty& moduleProperty,const tcps_Array<PCC_ModuleFile>& moudleFiles,INT64& moduleKey)
+TCPSError CNPDeploy::AddModule(const tcps_String& trunk,INT64 modelKey,const PCC_ModuleProperty& moduleProperty,const tcps_Array<PCC_ModuleFile>& moudleFiles,INT64& moduleKey)
 {
-	if(pgrid_util::Singleton<CTrunkManage>::instance().AddModule(trunk,moduleProperty,moudleFiles,moduleKey)==-1)
+	if(pgrid_util::Singleton<CTrunkManage>::instance().AddModule(trunk,modelKey,moduleProperty,moudleFiles,moduleKey)==-1)
 		return TCPS_ERROR;
     if (moduleProperty.moduleType == PCC_MODULE_VIDSTRUCTURE)//
 	{/*

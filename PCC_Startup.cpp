@@ -146,8 +146,8 @@ int CPCC_Startup::Startup()
 //	pgrid_util::Singleton<CScatteredManage>::instance().init();//
 	//scatterd Ä£¿éÄ¿Â¼
 
-//	pgrid_util::Singleton<CTrunkManage>::instance();//.init();//
-//	pgrid_util::Singleton<CModelManage>::instance().init();
+	pgrid_util::Singleton<CTrunkManage>::instance();//.init();//
+	pgrid_util::Singleton<CModelManage>::instance().init();
 //	PCC_ModelProperty modelProperty;
 //	modelProperty.modelTag.name = "mmodel0";
 //	modelProperty.modelTag.version.major = 1;
