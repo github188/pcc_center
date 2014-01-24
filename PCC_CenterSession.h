@@ -21,6 +21,7 @@
 #include "iscm_smart_container.h"
 #include "PCC_CenterTypesDefine.h"
 #include "trunkmanage.h"
+#include "griduser/MY_NP_GridUserClient.h"//权宜之计
 class PCC_CenterSession;
 
 //[[begin_iscm]]
@@ -756,7 +757,8 @@ private:
 
 public:
 	// TODO: 可以在此处添加PCC_User的自定义成员
-
+	MY_NP_GridUserClient m_gridConn;
+	IPP m_client_ipp;
 private:
 	PCC_User_S(PCC_CenterSessionMaker& sessionMaker, PCC_CenterSession* sessionR, IPCC_User_LocalCallback* sessionL);
 	~PCC_User_S();

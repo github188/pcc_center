@@ -294,6 +294,7 @@ PCC_User_S::PCC_User_S(PCC_CenterSessionMaker& sessionMaker, PCC_CenterSession* 
 {
 	NPR_ASSERT((NULL==sessionR) != (NULL==sessionL)); // 有且只能为一种模式
 	// TODO: 请添加PCC_User的构造处理
+
 }
 
 PCC_User_S::~PCC_User_S()
@@ -310,6 +311,7 @@ TCPSError PCC_User_S::OnConnected(
 	// TODO: 请添加接口PCC_User的连接后处理
 
 	NPLogInfo(("PCC_User_S::OnConnected(%d, %s, %d)", sessionKey, IPP_TO_STR_A(peerID_IPP), sessionCount));
+	m_client_ipp = peerID_IPP;
 	return TCPS_OK;
 }
 
@@ -325,6 +327,15 @@ void PCC_User_S::OnPostingCallReady()
 	// TODO: 请添加接口PCC_User的posting回调就绪处理
 
 	NPLogInfo(("PCC_User_S::OnPostingCallReady()"));
+	m_gridConn.m_user = "netposa";
+	m_gridConn.m_pass = "netposa";
+
+	IPP serverIPP;
+	
+	serverIPP.ip_ = GetLocalIP();//inet_addr("127.0.0.1");//连接本机
+	serverIPP.port_ = 9012;
+	//m_gridConn.m_service = m_psenssion;
+	m_gridConn.SetServeIPP(serverIPP,0,m_client_ipp);//
 }
 
 void PCC_User_S::OnPeerBroken(
@@ -382,7 +393,8 @@ TCPSError PCC_User_S::ListModules(
 				) method
 {
 	// TODO: 请实现此函数
-	return TCPS_ERR_NOT_IMPLEMENTED;
+	return (TCPSError)pgrid_util::Singleton<CTrunkManage>::instance().ListModules(regex,modulesInfo);
+	//return TCPS_ERR_NOT_IMPLEMENTED;
 }
 
 TCPSError PCC_User_S::Execute(
@@ -394,7 +406,59 @@ TCPSError PCC_User_S::Execute(
 				) method
 {
 	// TODO: 请实现此函数
-	return TCPS_ERR_NOT_IMPLEMENTED;
+	//由moduleKey可以推断出execute所调用的模型（及其版本），moduleKey是全局唯一的
+	//
+	//暂时都是网格作业
+	{
+		GRID_JobInfo  jobinfo;
+		jobinfo.dataInputUrl = inputUrl;
+		jobinfo.dataOutputUrl = outputUrl;
+		jobinfo.programParam = moduleParams;//应当支持内容拷贝 ，否则有问题
+
+		//jobinfo.splitter.name = "RecordsSplit";	//
+		jobinfo.splitter.ver.majorVer = 1;
+		jobinfo.splitter.ver.minorVer = 0;
+		PCC_Tag tag;
+		if(pgrid_util::Singleton<CTrunkManage>::instance().getModuleTag(moduleKey,tag)<0)
+			return TCPS_ERROR;
+		jobinfo.programID.ver.majorVer = tag.version.major;
+		jobinfo.programID.ver.minorVer = tag.version.minor;
+		jobinfo.programID.name = tag.name;
+
+		jobinfo.programID.cpuType = cpu_x86_x64;
+		jobinfo.programID.osType = ost_Windows_7;
+		jobinfo.programID.executeBits = eb_32bits;
+		jobinfo.programID.binaryType =bt_machineRaw; 
+
+		jobinfo.priority = GRID_JOBPRIO_NORMAL;
+		jobinfo.jobTaskMaxAttempts = 3;
+		jobinfo.skipFailedJobTaskPercent = 0;
+		GRID_ProgramID prog;
+		BOOL isFound =FALSE;
+		prog.name = tag.name;
+		prog.ver.majorVer=tag.version.major;
+		prog.ver.minorVer=tag.version.minor;
+		m_gridConn.FindJobProgram(prog,isFound);
+		if(!isFound)
+		{
+			//获取模块from trunk
+			tcps_Array<PCC_ModuleFile> moudleFiles;
+			pgrid_util::Singleton<CTrunkManage>::instance().GetModuleByID( moduleKey, moudleFiles);
+			//添加模块
+			GRID_ProgramInfo programInfo;
+			tcps_Array<GRID_ProgramFile> files;
+			files.Resize(moudleFiles.Length());
+			for (int i=0;i<moudleFiles.Length();++i)
+			{
+				files[i].name = moudleFiles[i].name;
+				files[i].data = moudleFiles[i].data;
+			}
+			programInfo.programID = jobinfo.programID;
+			m_gridConn.AddJobProgram( programInfo, files );
+		}
+		return m_gridConn.CommitJob(jobKey, jobinfo);
+	}
+	//return TCPS_ERR_NOT_IMPLEMENTED;
 }
 
 TCPSError PCC_User_S::QueryJobs(

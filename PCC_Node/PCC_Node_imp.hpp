@@ -278,7 +278,10 @@ protected:
 				IN const tcps_Array<PCC_ModelFile>& modelFiles
 				) callback
 	{
-		return pgrid_util::Singleton<CModelManage>::instance().AddModel(modelProperty,modelFiles);
+		GetServingIPP();
+		tcps_String ipp;
+		ipp.Assign(IPP_TO_STR(GetServingIPP()));
+		return pgrid_util::Singleton<CModelManage>::instance().AddModel(modelProperty,modelFiles,ipp);
 	}
 
 	virtual TCPSError DelModel(

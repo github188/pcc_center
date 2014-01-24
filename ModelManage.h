@@ -37,7 +37,7 @@ private:
 	BOOL FindExe (const char *searchDir,tcps_String& exefile);
 	int generatePort()
 	{
-		static int port =9100;
+		static int port =9011;
 		CNPAutoLock lock(m_lock_port);
 		return ++port;
 	}

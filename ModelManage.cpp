@@ -157,6 +157,33 @@ TCPSError CModelManage::ListModels(
 				 tcps_Array<PCC_ModelPropWithKey>& modelsInfo
 				)
 {
+	std::stringstream query_sql;
+	query_sql<< "select id_mod,name_mod,ver_mod from Models ";
+	sqlite3_stmt* st_query;
+	if (SQLITE_OK !=sqlite3_prepare_v2(m_db,query_sql.str().c_str(),-1,&st_query,NULL))
+	{
+		sqlite3_finalize(st_query);  
+		NPLogError(("Ê§°Ü£¡:%s\n",__FUNCTION__));
+		return TCPS_ERROR;
+	}
+
+	//char name_mod[128];
+	char ver_mod[16];
+	while(sqlite3_step(st_query)== SQLITE_ROW)
+	{
+		modelsInfo.Resize(modelsInfo.Length()+1);
+		modelsInfo[modelsInfo.Length()-1].key = sqlite3_column_int64(st_query,0);
+		modelsInfo[modelsInfo.Length()-1].prop.modelTag.name.Assign((const char *)sqlite3_column_text(st_query,1));
+		strcpy(ver_mod,(const char *)sqlite3_column_text(st_query,2));
+		CSmartArray<tstring> modNamVer;
+		StrSeparater_Sep(ver_mod,".",modNamVer);
+		modelsInfo[modelsInfo.Length()-1].prop.modelTag.version.major = atoi(modNamVer[0].c_str());
+		modelsInfo[modelsInfo.Length()-1].prop.modelTag.version.minor = atoi(modNamVer[1].c_str());
+
+		
+	}
+
+	sqlite3_finalize(st_query);  
 	return TCPS_OK;
 }
 

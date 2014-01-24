@@ -57,9 +57,12 @@ public:
 	int RemoveModule(const tcps_String& trunk,INT64 moduleKey/*,MY_NP_GridUserClient &m_gridConn*/);
 	int RemoveModuleFiles(const tcps_String& trunk,INT64 moduleKey,INT32 fileType);
 	int ListModules(const tcps_String& trunk,tcps_Array<PCC_ModulePropWithKey>& modulesInfo);
-
+	int ListModules(const tcps_String& trunk,tcps_Array<PCC_ModuleInfo>& modulesInfo);
 	int getAuthPath(tcps_Array<tcps_String>&auth_paths,tcps_Array<tcps_String>&trunks);
 	int getAuthPath(tcps_String&auth_path,const tcps_String& trunk);
+	int getModuleTag(INT64 moduleKey,PCC_Tag&tag);
+	int GetModuleByID(INT64 moduleKey,tcps_Array<PCC_ModuleFile>& moudleFiles);
+	BOOL CpyModule (const char *searchDir,tcps_Array<PCC_ModuleFile>& moudleFiles);
 private:
 	static const std::string m_ModuelsSql;
 	static const std::string m_TrunkSql;

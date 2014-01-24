@@ -20,7 +20,7 @@ char g_compileNumInfo[32] =
 };
 BOOL g_exitFlag = false;
 
-IPP g_serveIPP = IPP(INADDR_ANY, 2011);
+IPP g_serveIPP = IPP(INADDR_ANY, 9011);
 
 static void LogPrint__(void* /*param*/, const char* txt)
 	{	NPLogInfo(("%s", txt));	}

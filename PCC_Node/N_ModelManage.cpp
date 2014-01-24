@@ -62,7 +62,8 @@ int CModelManage::init()
 //modelFiles中为压缩文件
 TCPSError CModelManage::AddModel(
 				 const PCC_ModelProperty& modelProperty,
-				 const tcps_Array<PCC_ModelFile>& modelFiles
+				 const tcps_Array<PCC_ModelFile>& modelFiles,
+				 const tcps_String&ipp_str
 				) 
 {
 	// 判断是否已经添加过此模型了
@@ -147,7 +148,7 @@ TCPSError CModelManage::AddModel(
 			return TCPS_ERROR;
 		}
 		strcat(buf,exefile.Get());
-		StartXNode(modelProperty.modelTag,buf);
+		StartXNode(modelProperty.modelTag,buf,ipp_str);
 
 		return TCPS_OK;
 	}
@@ -229,7 +230,7 @@ BOOL CModelManage::FindExe (const char *searchDir,tcps_String& exefile)
 }
 
 
-TCPSError CModelManage::StartXNode(const PCC_Tag& tag,const char *filepath)
+TCPSError CModelManage::StartXNode(const PCC_Tag& tag,const char *filepath,const tcps_String&ipp_str)
 {
 	std::stringstream auth_exe_port;
 	OSProcessID pid = INVALID_OSPROCESSID;
@@ -237,13 +238,15 @@ TCPSError CModelManage::StartXNode(const PCC_Tag& tag,const char *filepath)
 	nwProcessInfo info;
 	strcpy(info.filepath,filepath);
 	info.pid= info.port = -1;
+	//temp
+	info.port =9012;
 	
 	
 	while(INVALID_OSPROCESSID == pid&&(--cnt)){
 		auth_exe_port.str("");
 		auth_exe_port.clear();
 		info.port=generatePort();
-		auth_exe_port<<filepath<<" -port"<< info.port;//todo潜在的端口冲突解决策略 考虑srand
+		auth_exe_port<<filepath<<" -ippcenter"<<ipp_str.Get() <<"."<<9012;//info.port;//todo潜在的端口冲突解决策略 考虑srand
 		info.pid = pid = NPCreateProcess(auth_exe_port.str().c_str());
 		if (INVALID_OSPROCESSID == pid)
 		{

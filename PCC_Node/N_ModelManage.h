@@ -21,7 +21,8 @@ public:
     int init();
 TCPSError AddModel(
 				 const PCC_ModelProperty& modelProperty,
-				 const tcps_Array<PCC_ModelFile>& modelFiles
+				 const tcps_Array<PCC_ModelFile>& modelFiles,
+				 const tcps_String&ipp_str
 				); 
 
 
@@ -41,7 +42,8 @@ private:
 		CNPAutoLock lock(m_lock_port);
 		return ++port;
 	}
-	TCPSError StartXNode(const PCC_Tag& tag,const char *path);
+	TCPSError StartXNode(const PCC_Tag& tag,const char *path,const tcps_String&ipp_str);
+				 
 
 private:
 	static const std::string m_ModelsSql;

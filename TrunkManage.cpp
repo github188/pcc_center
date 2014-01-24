@@ -8,6 +8,7 @@
 #include "strtmpl.h"
 #include "singleton.h"
 #include "ipcvt.h"
+#include "filesearch.h"
 //#include "modulemanage.h"
 const std::string CTrunkManage::m_TrunkSql("CREATE TABLE IF NOT EXISTS PCC_TRUNKS \
 										   (id_trunk INTEGER PRIMARY KEY AUTOINCREMENT, trunk_name TEXT NOT NULL unique, trunk_path TEXT NOT NULL)"); 
@@ -230,10 +231,12 @@ int CTrunkManage::getAuthPath(tcps_Array<tcps_String>&auth_paths,tcps_Array<tcps
 		_tcsrchr(buf,'\\')[1] = 0;
 		_tcsrchr(buf,'\\')[1] = 0;
 	}
+	sqlite3_finalize(st_query);  
 	return 0;
 }
 int CTrunkManage::getAuthPath(tcps_String&auth_path,const tcps_String& trunk)
 {
+	CNPAutoLock lok(m_lock_db);
 	std::stringstream sql_query;
 	sql_query<<"select module_path,module_name from PCC_TRUNK_MODULES as a left join PCC_TRUNKS as b on a.id_tk=b.id_trunk where type=0 and trunk_name='"
 		<<trunk.Get()<<"'";
@@ -821,7 +824,138 @@ int CTrunkManage::ListModules(const tcps_String& trunk,tcps_Array<PCC_ModuleProp
 	sqlite3_finalize(st_query);  
 	return 0;
 }
+int CTrunkManage::ListModules(const tcps_String& trunk,tcps_Array<PCC_ModuleInfo>& modulesInfo)
+{
+	CNPAutoLock lok(m_lock_db);
+	std::stringstream sql_query;
+	sql_query<<"select id_module,module_name,type from PCC_TRUNK_MODULES as a left join PCC_TRUNKS as b on a.id_tk=b.id_trunk and a.type!=0 where  trunk_name='"
+		<<trunk.Get()<<"'";
 
+	sqlite3_stmt* st_query;
+	if (SQLITE_OK !=sqlite3_prepare_v2(m_db,sql_query.str().c_str(),-1,&st_query,NULL))
+	{
+		sqlite3_finalize(st_query);  
+		NPLogError(("%s,Ê§°Ü£¡\n",__FUNCTION__));
+		return -1;
+	}
+	while(sqlite3_step(st_query) == SQLITE_ROW)
+	{
+		int key = sqlite3_column_int(st_query,0);
+		const unsigned char *result = sqlite3_column_text(st_query,1);
+		int ty = sqlite3_column_int(st_query,2);
+		std::stringstream mod;
+		mod << result;
+
+		CSmartArray<tstring> modNamVer;
+		StrSeparater_Sep(mod.str().c_str(),"_",modNamVer);
+		ASSERT(modNamVer.size()==3);
+		modulesInfo.Resize(modulesInfo.Length()+1);
+		modulesInfo[modulesInfo.Length()-1].moduleKey =key;
+		modulesInfo[modulesInfo.Length()-1].moduleTag.name = modNamVer[0].c_str();
+		modulesInfo[modulesInfo.Length()-1].moduleTag.version .major = atoi(modNamVer[1].c_str());
+		modulesInfo[modulesInfo.Length()-1].moduleTag.version .minor = atoi(modNamVer[2].c_str());
+		modulesInfo[modulesInfo.Length()-1].moduleType = ty;
+	}
+	sqlite3_finalize(st_query);  
+	return 0;
+}
+int CTrunkManage::getModuleTag(INT64 moduleKey,PCC_Tag&tag)
+{
+	CNPAutoLock lok(m_lock_db);
+	std::stringstream sql_query;
+	sql_query<<"select module_name from PCC_TRUNK_MODULES where id_module="<<moduleKey;
+	sqlite3_stmt* st_query;
+	if (SQLITE_OK !=sqlite3_prepare_v2(m_db,sql_query.str().c_str(),-1,&st_query,NULL))
+	{
+		sqlite3_finalize(st_query);  
+		NPLogError(("%s,Ê§°Ü£¡\n",__FUNCTION__));
+		return -1;
+	}
+	if(sqlite3_step(st_query) != SQLITE_ROW)
+	{
+		sqlite3_finalize(st_query);  
+		NPLogError(("%s,²»´æÔÚ£¡\n",__FUNCTION__));  
+		return -1;
+	}
+	tcps_String name_ver;
+	name_ver.Assign((const char *)sqlite3_column_text(st_query,0));
+	
+	CSmartArray<tstring> modNamVer;
+	StrSeparater_Sep(name_ver.Get(),"_",modNamVer);
+	tag.name = modNamVer[0].c_str();
+	tag.version.major =atoi(modNamVer[1].c_str());
+	tag.version.minor =atoi(modNamVer[2].c_str());
+
+	sqlite3_finalize(st_query);  
+	return 0;
+}
+int CTrunkManage::GetModuleByID(INT64 moduleKey,tcps_Array<PCC_ModuleFile>& moudleFiles)
+{
+	CNPAutoLock lok(m_lock_db);
+	std::stringstream sql_query;
+	sql_query<<"select trunk_name,module_name from PCC_TRUNK_MODULES as a left join PCC_TRUNKS as b on a.id_tk=b.id_trunk and id_module="
+		<<moduleKey;
+	sqlite3_stmt* st_query;
+	if (SQLITE_OK !=sqlite3_prepare_v2(m_db,sql_query.str().c_str(),-1,&st_query,NULL))
+	{
+		sqlite3_finalize(st_query);  
+		NPLogError(("Ê§°Ü£¡:%s\n",__FUNCTION__));
+		return -1;
+	}
+	char buf[512];
+	GetModuleFileName(NULL,buf,512);
+	
+	strcat(buf,"Trunks\\");
+	//strcat(buf,trunk.Get());
+	if(sqlite3_step(st_query)== SQLITE_ROW)
+	{
+		strcat(buf,(const char *)sqlite3_column_text(st_query,0));
+		strcat(buf,"\\");
+		strcat(buf,(const char *)sqlite3_column_text(st_query,1));
+		strcat(buf,"\\");
+		
+	}
+	else
+		return -1;
+
+	CpyModule(buf,moudleFiles);
+	sqlite3_finalize(st_query);  
+	return 0;
+}
+BOOL CTrunkManage::CpyModule (const char *searchDir,tcps_Array<PCC_ModuleFile>& moudleFiles)
+{
+	struct TFSCB
+	{
+		
+		static BOOL fn(LPVOID cbParam, BOOL isDir, LPCTSTR filePathname)
+		{
+
+			if (!isDir)
+			{
+				CFileStorage fs;
+				if(fs.Open(filePathname,CFileStorage::fs_read_only))//fail or success
+				{
+					tcps_Array<PCC_ModuleFile>& moudleFiles = *(tcps_Array<PCC_ModuleFile>*)cbParam;
+					moudleFiles.Resize(moudleFiles.Length()+1);
+					moudleFiles[moudleFiles.Length()-1].name = GetFileName(filePathname);//fs.GetName();
+					moudleFiles[moudleFiles.Length()-1].data.Resize(fs.GetSize());
+					fs.Read(0,moudleFiles[moudleFiles.Length()-1].data.Get(),fs.GetSize());
+				}
+			}
+
+			return true;
+		}
+
+		static BOOL Find (const char *srcDir,void* param)
+		{
+
+			return FileSearchEx(srcDir, "*", 0, fn, param , 0, "", "");
+		}
+	};
+
+	
+	return (TFSCB::Find(searchDir,&moudleFiles));
+}
 ///////////////////////////////CNPDeploy////////////////////////////////////////////////
 CNPDeploy::CNPDeploy()
 {
